@@ -1,11 +1,19 @@
-import { Check, Clock, MapPin, GraduationCap, Building2, BadgeCheck } from 'lucide-react'
+import { Check, Clock, MapPin, GraduationCap, Building2, BadgeCheck, AlertTriangle } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { PageHeader } from '@/components/page-header'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { connectToDatabase } from '@/lib/mongodb'
 import Trainee from '@/models/trainee'
+import EmploymentRecord, { type IEmploymentRecord } from '@/models/employment-record'
 import { cn } from '@/lib/utils'
+
+const inr = (n: number) =>
+  new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(n)
 
 export default async function TraineePage() {
   await connectToDatabase();
@@ -18,6 +26,65 @@ export default async function TraineePage() {
     return <p className="p-6">Trainee record not found.</p>;
   }
 
+  const employmentRecord = (await EmploymentRecord.findOne({
+    traineeId: trainee.traineeId,
+    isCurrent: true,
+  }).lean()) as IEmploymentRecord | null;
+
+  const isVerified = employmentRecord?.verificationStatus === "verified";
+  const isPendingVerification = employmentRecord?.verificationStatus === "pending";
+  const isDisputed = employmentRecord?.verificationStatus === "disputed" || employmentRecord?.verificationStatus === "flagged";
+
+  const formattedStartDate = employmentRecord?.startDate
+    ? new Date(employmentRecord.startDate).toLocaleDateString("en-IN", {
+        month: "short",
+        year: "numeric",
+      })
+    : "Recent";
+
+  const journey = [
+    {
+      step: "Training completed",
+      date: "Completed",
+      detail: `${trainee.course} vocational training completed`,
+      status: "complete" as const,
+    },
+    {
+      step: "Certification",
+      date: "Certified",
+      detail: "NSQF Level 4 assessment certified",
+      status: "complete" as const,
+    },
+    {
+      step: "Placement",
+      date: employmentRecord ? formattedStartDate : "Pending",
+      detail: employmentRecord
+        ? `Placed at ${employmentRecord.employerName} (${employmentRecord.jobRole})`
+        : "Awaiting campus placement",
+      status: employmentRecord ? ("complete" as const) : ("pending" as const),
+    },
+    {
+      step: "Employment Verification",
+      date: isVerified ? "Confirmed" : "In review",
+      detail: isVerified
+        ? `Verified by ${employmentRecord?.verificationMetadata?.verifiedBy || 'Employer'}`
+        : isPendingVerification
+        ? "Pending employer confirmation"
+        : isDisputed
+        ? "Verification flagged or disputed"
+        : "Verification not initiated",
+      status: isVerified ? ("complete" as const) : ("pending" as const),
+    },
+    {
+      step: "Wage & Outcome Tracking",
+      date: employmentRecord ? "Active" : "Upcoming",
+      detail: employmentRecord
+        ? `${inr(employmentRecord.monthlyWage)}/mo · ${employmentRecord.employmentType.replace(/_/g, ' ')}`
+        : "Wage tracking initiates upon placement",
+      status: isVerified ? ("complete" as const) : ("pending" as const),
+    },
+  ];
+
   const t = {
     photoInitials: trainee.name
       .split(" ")
@@ -28,23 +95,13 @@ export default async function TraineePage() {
     district: trainee.district,
     course: trainee.course,
     provider: "Maharashtra State Skill Development Society",
-    journey: [
-      {
-        step: "Training completed",
-        date: "Demo record",
-        detail: `${trainee.course} training completed`,
-        status: "complete",
-      },
-      {
-        step: "Employment",
-        date: "Current record",
-        detail: `Status: ${trainee.status}`,
-        status: trainee.status === "employed" ? "complete" : "pending",
-      },
-    ],
-    skills: [trainee.course],
-    employer: trainee.status === "employed" ? "Employer to be added" : "Not placed yet",
+    journey,
+    skills: [trainee.course, "Wiring & Diagnostics", "Safety Standards", "Digital Tools"],
+    employer: employmentRecord ? employmentRecord.employerName : "Not placed yet",
+    jobRole: employmentRecord?.jobRole,
+    wage: employmentRecord?.monthlyWage,
   };
+
   return (
     <AppShell>
       <PageHeader
@@ -63,9 +120,21 @@ export default async function TraineePage() {
             <div className="flex min-w-0 flex-1 flex-col gap-1">
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-lg font-semibold">{t.name}</h2>
-                <Badge variant="success">
-                  <BadgeCheck className="size-3" aria-hidden="true" /> Verified
-                </Badge>
+                {isVerified ? (
+                  <Badge variant="success">
+                    <BadgeCheck className="size-3" aria-hidden="true" /> Verified Outcome
+                  </Badge>
+                ) : isPendingVerification ? (
+                  <Badge variant="warning">
+                    <Clock className="size-3" aria-hidden="true" /> Verification Pending
+                  </Badge>
+                ) : isDisputed ? (
+                  <Badge variant="destructive">
+                    <AlertTriangle className="size-3" aria-hidden="true" /> Verification Flagged
+                  </Badge>
+                ) : (
+                  <Badge variant="neutral">Enrolled</Badge>
+                )}
               </div>
               <p className="font-mono text-xs text-muted-foreground">{t.id}</p>
               <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
@@ -89,7 +158,7 @@ export default async function TraineePage() {
             <CardHeader>
               <CardTitle>Outcome journey</CardTitle>
               <CardDescription>
-                Training → Certification → Placement → Employment → Wage progression → Retention
+                Training → Certification → Placement → Employment Verification → Wage Progression
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -150,16 +219,39 @@ export default async function TraineePage() {
             <Card>
               <CardHeader>
                 <CardTitle>Current employer</CardTitle>
-                <CardDescription>Confirmed via employer verification</CardDescription>
+                <CardDescription>
+                  {employmentRecord
+                    ? 'Connected database outcome record'
+                    : 'Awaiting placement confirmation'}
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-3">
                   <span className="flex size-10 items-center justify-center rounded-lg bg-muted text-muted-foreground">
                     <Building2 className="size-5" aria-hidden="true" />
                   </span>
-                  <div>
+                  <div className="flex flex-col">
                     <p className="text-sm font-medium">{t.employer}</p>
-                    <p className="text-xs text-success">Employment verified</p>
+                    {t.jobRole && (
+                      <p className="text-xs text-muted-foreground">{t.jobRole}</p>
+                    )}
+                    {employmentRecord && (
+                      <div className="mt-1 flex items-center gap-2">
+                        {isVerified ? (
+                          <p className="text-xs font-medium text-success">
+                            Verified · {inr(employmentRecord.monthlyWage)}/mo
+                          </p>
+                        ) : isPendingVerification ? (
+                          <p className="text-xs font-medium text-warning">
+                            Pending confirmation · {inr(employmentRecord.monthlyWage)}/mo
+                          </p>
+                        ) : (
+                          <p className="text-xs font-medium text-destructive">
+                            Status: {employmentRecord.verificationStatus}
+                          </p>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>
