@@ -3,10 +3,48 @@ import { AppShell } from '@/components/app-shell'
 import { PageHeader } from '@/components/page-header'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { traineePassport as t } from '@/lib/mock-data'
+import { connectToDatabase } from '@/lib/mongodb'
+import Trainee from '@/models/trainee'
 import { cn } from '@/lib/utils'
 
-export default function TraineePage() {
+export default async function TraineePage() {
+  await connectToDatabase();
+
+  const trainee = await Trainee.findOne({
+    traineeId: "KP-0001",
+  }).lean();
+
+  if (!trainee) {
+    return <p className="p-6">Trainee record not found.</p>;
+  }
+
+  const t = {
+    photoInitials: trainee.name
+      .split(" ")
+      .map((part: string) => part[0])
+      .join(""),
+    name: trainee.name,
+    id: trainee.traineeId,
+    district: trainee.district,
+    course: trainee.course,
+    provider: "Maharashtra State Skill Development Society",
+    journey: [
+      {
+        step: "Training completed",
+        date: "Demo record",
+        detail: `${trainee.course} training completed`,
+        status: "complete",
+      },
+      {
+        step: "Employment",
+        date: "Current record",
+        detail: `Status: ${trainee.status}`,
+        status: trainee.status === "employed" ? "complete" : "pending",
+      },
+    ],
+    skills: [trainee.course],
+    employer: trainee.status === "employed" ? "Employer to be added" : "Not placed yet",
+  };
   return (
     <AppShell>
       <PageHeader
