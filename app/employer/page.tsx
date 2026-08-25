@@ -70,7 +70,7 @@ export default function EmployerPage() {
     try {
       setLoading(true)
       setError(null)
-      const res = await fetch('/api/employment')
+      const res = await fetch('/api/employment?isCurrent=true')
       const data = await res.json()
 
       if (data.success && Array.isArray(data.employmentRecords)) {

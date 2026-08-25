@@ -21,17 +21,34 @@ const relevanceLabels: Record<string, { label: string; variant: 'success' | 'war
   unrelated: { label: 'Not Related', variant: 'neutral' },
 }
 
-export default async function TraineePage() {
+import Link from 'next/link'
+
+export default async function TraineePage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ id?: string }>
+}) {
+  const resolvedParams = searchParams ? await searchParams : {};
+  const currentId = (resolvedParams.id || "KP-0001").trim();
+
   let trainee: any = null;
+  let allTrainees: any[] = [];
   let employmentRecord: IEmploymentRecord | null = null;
   let dbError: string | null = null;
 
   try {
     await connectToDatabase();
 
+    allTrainees = await Trainee.find().sort({ traineeId: 1 }).lean();
+
     trainee = await Trainee.findOne({
-      traineeId: "KP-0001",
+      traineeId: currentId,
     }).lean();
+
+    // Fallback to first trainee if requested id is not found
+    if (!trainee && allTrainees.length > 0) {
+      trainee = allTrainees[0];
+    }
 
     if (trainee) {
       employmentRecord = (await EmploymentRecord.findOne({
@@ -57,7 +74,7 @@ export default async function TraineePage() {
               <AlertTriangle className="size-8 text-warning" />
               <p className="text-sm font-semibold">{dbError ? "Database Connection Unavailable" : "Trainee Record Not Found"}</p>
               <p className="max-w-md text-xs text-muted-foreground">
-                {dbError || "No record found for trainee ID KP-0001. Please ensure database is seeded."}
+                {dbError || `No record found for trainee ID '${currentId}'. Please ensure database is seeded.`}
               </p>
             </CardContent>
           </Card>
@@ -150,6 +167,30 @@ export default async function TraineePage() {
       />
 
       <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+        {/* Trainee Switcher (for demo evaluation) */}
+        {allTrainees.length > 1 && (
+          <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-card p-2 text-xs">
+            <span className="font-semibold text-muted-foreground px-2">Select Trainee Passport:</span>
+            {allTrainees.map((tr) => {
+              const active = tr.traineeId === trainee.traineeId;
+              return (
+                <Link
+                  key={tr.traineeId}
+                  href={`/trainee?id=${tr.traineeId}`}
+                  className={cn(
+                    'rounded-md px-3 py-1 font-medium transition-colors',
+                    active
+                      ? 'bg-primary text-primary-foreground shadow-xs'
+                      : 'bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground'
+                  )}
+                >
+                  {tr.name} ({tr.traineeId})
+                </Link>
+              );
+            })}
+          </div>
+        )}
+
         {/* Identity */}
         <Card>
           <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center">
