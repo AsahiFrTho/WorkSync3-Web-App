@@ -21,6 +21,26 @@ export async function POST() {
         course: "Electrician",
         status: "employed",
         monthlyWage: 16800,
+        trainingProvider: "Yashaswi Skill Academy, Pune",
+        trainingPeriod: {
+          startDate: new Date("2023-10-01"),
+          endDate: new Date("2024-03-15"),
+          hours: 480,
+        },
+        skills: [
+          "Industrial Wiring",
+          "Panel Assembly",
+          "PLC Basics",
+          "Electrical Safety",
+          "Digital Tools",
+        ],
+        certificate: {
+          certificateId: "MSD-2024-ELE-00892",
+          issueDate: new Date("2024-03-25"),
+          nsqfLevel: 4,
+          issuer: "NCVET / MSSDS",
+          grade: "A (88%)",
+        },
       },
       { new: true, upsert: true }
     );
@@ -34,6 +54,26 @@ export async function POST() {
         course: "Healthcare Assistant",
         status: "employed",
         monthlyWage: 14500,
+        trainingProvider: "Sahyadri Institute of Healthcare, Nashik",
+        trainingPeriod: {
+          startDate: new Date("2023-11-15"),
+          endDate: new Date("2024-04-30"),
+          hours: 420,
+        },
+        skills: [
+          "Patient Care",
+          "Vital Signs",
+          "First Aid",
+          "Clinical Support",
+          "Infection Control",
+        ],
+        certificate: {
+          certificateId: "MSD-2024-HCA-01452",
+          issueDate: new Date("2024-05-05"),
+          nsqfLevel: 4,
+          issuer: "NCVET / Healthcare SSC",
+          grade: "A+ (92%)",
+        },
       },
       { new: true, upsert: true }
     );
@@ -47,6 +87,26 @@ export async function POST() {
         course: "CNC Machine Operator",
         status: "certified",
         monthlyWage: 0,
+        trainingProvider: "Deccan Technical Centre, Pune",
+        trainingPeriod: {
+          startDate: new Date("2023-11-01"),
+          endDate: new Date("2024-04-15"),
+          hours: 500,
+        },
+        skills: [
+          "CNC Setup",
+          "Machine Operation",
+          "Precision Measurement",
+          "Workshop Safety",
+          "Blueprint Reading",
+        ],
+        certificate: {
+          certificateId: "MSD-2024-CNC-00631",
+          issueDate: new Date("2024-04-22"),
+          nsqfLevel: 4,
+          issuer: "NCVET / Capital Goods SSC",
+          grade: "B+ (78%)",
+        },
       },
       { new: true, upsert: true }
     );

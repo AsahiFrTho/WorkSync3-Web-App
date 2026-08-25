@@ -33,6 +33,8 @@ interface IEmploymentRecordItem {
   verificationStatus: 'pending' | 'verified' | 'disputed' | 'flagged'
   verificationMetadata?: {
     verifiedAt?: string
+
+
     verifiedBy?: string
     disputeReason?: string
     remarks?: string
@@ -253,9 +255,9 @@ export default function EmployerPage() {
                 const courseName = e.trainee?.course || 'Vocational Trade'
                 const formattedDate = e.startDate
                   ? new Date(e.startDate).toLocaleDateString('en-IN', {
-                      month: 'short',
-                      year: 'numeric',
-                    })
+                    month: 'short',
+                    year: 'numeric',
+                  })
                   : 'Recent'
                 const isItemProcessing = actionInProgress === e._id
                 const itemFeedback = feedback?.id === e._id ? feedback : null
@@ -294,9 +296,8 @@ export default function EmployerPage() {
                       )}
                       {itemFeedback && (
                         <div
-                          className={`mt-1 flex items-center gap-1.5 text-xs font-medium ${
-                            itemFeedback.type === 'success' ? 'text-success' : 'text-destructive'
-                          }`}
+                          className={`mt-1 flex items-center gap-1.5 text-xs font-medium ${itemFeedback.type === 'success' ? 'text-success' : 'text-destructive'
+                            }`}
                         >
                           {itemFeedback.type === 'success' ? (
                             <CheckCircle2 className="size-3.5" />

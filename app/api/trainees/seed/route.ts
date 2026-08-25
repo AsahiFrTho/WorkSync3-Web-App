@@ -13,6 +13,26 @@ export async function POST() {
                 course: "Electrician",
                 status: "employed",
                 monthlyWage: 16800,
+                trainingProvider: "Yashaswi Skill Academy, Pune",
+                trainingPeriod: {
+                    startDate: new Date("2023-10-01"),
+                    endDate: new Date("2024-03-15"),
+                    hours: 480,
+                },
+                skills: [
+                    "Industrial Wiring",
+                    "Panel Assembly",
+                    "PLC Basics",
+                    "Electrical Safety",
+                    "Digital Tools",
+                ],
+                certificate: {
+                    certificateId: "MSD-2024-ELE-00892",
+                    issueDate: new Date("2024-03-25"),
+                    nsqfLevel: 4,
+                    issuer: "NCVET / MSSDS",
+                    grade: "A (88%)",
+                },
             },
             {
                 new: true,
