@@ -1,7 +1,8 @@
-import { model, models, Schema, type Types } from "mongoose";
+﻿import { model, models, Schema, type Types } from "mongoose";
 
 export type EmploymentType = "wage_employment" | "self_employment" | "apprenticeship";
 export type VerificationStatus = "pending" | "verified" | "disputed" | "flagged";
+export type TrainingRelevance = "directly_related" | "partially_related" | "unrelated";
 export type FollowUpMilestone = "30_day" | "90_day" | "180_day" | "365_day";
 export type FollowUpStatus = "pending" | "retained" | "left_job" | "wage_increased" | "unreachable";
 export type VerificationMethod = "employer_portal" | "hr_call" | "offer_letter" | "payslip" | "pf_uan";
@@ -36,6 +37,7 @@ export interface IEmploymentRecord {
   endDate?: Date;
   isCurrent: boolean;
   monthlyWage: number;
+  trainingRelevance: TrainingRelevance;
   verificationStatus: VerificationStatus;
   verificationMetadata?: IVerificationMetadata;
   followUps?: IFollowUp[];
@@ -139,6 +141,12 @@ const employmentRecordSchema = new Schema<IEmploymentRecord>(
       type: Number,
       required: true,
       min: 0,
+    },
+    trainingRelevance: {
+      type: String,
+      enum: ["directly_related", "partially_related", "unrelated"],
+      default: "directly_related",
+      required: true,
     },
     verificationStatus: {
       type: String,

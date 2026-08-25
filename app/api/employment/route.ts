@@ -2,6 +2,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import EmploymentRecord, {
   type EmploymentType,
   type VerificationStatus,
+  type TrainingRelevance,
 } from "@/models/employment-record";
 import Trainee from "@/models/trainee";
 import { type NextRequest } from "next/server";
@@ -71,6 +72,7 @@ export async function POST(request: NextRequest) {
       endDate,
       isCurrent = true,
       monthlyWage,
+      trainingRelevance = "directly_related",
       verificationStatus = "pending",
       verificationMetadata,
       notes,
@@ -151,6 +153,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const validTrainingRelevances: TrainingRelevance[] = [
+      "directly_related",
+      "partially_related",
+      "unrelated",
+    ];
+    if (!validTrainingRelevances.includes(trainingRelevance)) {
+      return Response.json(
+        {
+          success: false,
+          error: `Invalid trainingRelevance. Must be one of: ${validTrainingRelevances.join(", ")}`,
+        },
+        { status: 400 }
+      );
+    }
+
     const parsedStartDate = new Date(startDate);
     const parsedEndDate = endDate ? new Date(endDate) : undefined;
     if (parsedEndDate && parsedEndDate < parsedStartDate) {
@@ -194,6 +211,7 @@ export async function POST(request: NextRequest) {
       endDate: parsedEndDate,
       isCurrent: Boolean(isCurrent),
       monthlyWage,
+      trainingRelevance,
       verificationStatus,
       verificationMetadata: verificationMetadata || {},
       followUps: initialFollowUps,

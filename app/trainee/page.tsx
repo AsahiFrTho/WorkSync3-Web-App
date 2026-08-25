@@ -15,25 +15,64 @@ const inr = (n: number) =>
     maximumFractionDigits: 0,
   }).format(n)
 
+const relevanceLabels: Record<string, { label: string; variant: 'success' | 'warning' | 'neutral' }> = {
+  directly_related: { label: 'Direct Trade Alignment', variant: 'success' },
+  partially_related: { label: 'Partially Related', variant: 'warning' },
+  unrelated: { label: 'Not Related', variant: 'neutral' },
+}
+
 export default async function TraineePage() {
-  await connectToDatabase();
+  let trainee: any = null;
+  let employmentRecord: IEmploymentRecord | null = null;
+  let dbError: string | null = null;
 
-  const trainee = await Trainee.findOne({
-    traineeId: "KP-0001",
-  }).lean();
+  try {
+    await connectToDatabase();
 
-  if (!trainee) {
-    return <p className="p-6">Trainee record not found.</p>;
+    trainee = await Trainee.findOne({
+      traineeId: "KP-0001",
+    }).lean();
+
+    if (trainee) {
+      employmentRecord = (await EmploymentRecord.findOne({
+        traineeId: trainee.traineeId,
+        isCurrent: true,
+      }).lean()) as IEmploymentRecord | null;
+    }
+  } catch (err) {
+    dbError = err instanceof Error ? err.message : "Database connection failed";
   }
 
-  const employmentRecord = (await EmploymentRecord.findOne({
-    traineeId: trainee.traineeId,
-    isCurrent: true,
-  }).lean()) as IEmploymentRecord | null;
+  if (dbError || !trainee) {
+    return (
+      <AppShell>
+        <PageHeader
+          eyebrow="Trainee"
+          title="Trainee Outcome Passport"
+          description="A single, verifiable record that follows a trainee across the entire journey."
+        />
+        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+          <Card className="border-border">
+            <CardContent className="flex flex-col items-center justify-center gap-2 p-8 text-center">
+              <AlertTriangle className="size-8 text-warning" />
+              <p className="text-sm font-semibold">{dbError ? "Database Connection Unavailable" : "Trainee Record Not Found"}</p>
+              <p className="max-w-md text-xs text-muted-foreground">
+                {dbError || "No record found for trainee ID KP-0001. Please ensure database is seeded."}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </AppShell>
+    );
+  }
 
   const isVerified = employmentRecord?.verificationStatus === "verified";
   const isPendingVerification = employmentRecord?.verificationStatus === "pending";
   const isDisputed = employmentRecord?.verificationStatus === "disputed" || employmentRecord?.verificationStatus === "flagged";
+
+  const relevanceInfo = employmentRecord?.trainingRelevance
+    ? relevanceLabels[employmentRecord.trainingRelevance] || relevanceLabels.directly_related
+    : null;
 
   const formattedStartDate = employmentRecord?.startDate
     ? new Date(employmentRecord.startDate).toLocaleDateString("en-IN", {
@@ -65,13 +104,13 @@ export default async function TraineePage() {
     },
     {
       step: "Employment Verification",
-      date: isVerified ? "Confirmed" : "In review",
+      date: isVerified ? "Confirmed" : isDisputed ? "Disputed" : isPendingVerification ? "In review" : "Upcoming",
       detail: isVerified
         ? `Verified by ${employmentRecord?.verificationMetadata?.verifiedBy || 'Employer'}`
         : isPendingVerification
         ? "Pending employer confirmation"
         : isDisputed
-        ? "Verification flagged or disputed"
+        ? `Verification disputed${employmentRecord?.verificationMetadata?.disputeReason ? `: ${employmentRecord.verificationMetadata.disputeReason}` : ''}`
         : "Verification not initiated",
       status: isVerified ? ("complete" as const) : ("pending" as const),
     },
@@ -134,6 +173,11 @@ export default async function TraineePage() {
                   </Badge>
                 ) : (
                   <Badge variant="neutral">Enrolled</Badge>
+                )}
+                {relevanceInfo && (
+                  <Badge variant={relevanceInfo.variant}>
+                    {relevanceInfo.label}
+                  </Badge>
                 )}
               </div>
               <p className="font-mono text-xs text-muted-foreground">{t.id}</p>
@@ -235,6 +279,13 @@ export default async function TraineePage() {
                     {t.jobRole && (
                       <p className="text-xs text-muted-foreground">{t.jobRole}</p>
                     )}
+                    {relevanceInfo && (
+                      <div className="mt-1">
+                        <Badge variant={relevanceInfo.variant} className="text-[11px]">
+                          {relevanceInfo.label}
+                        </Badge>
+                      </div>
+                    )}
                     {employmentRecord && (
                       <div className="mt-1 flex items-center gap-2">
                         {isVerified ? (
@@ -244,6 +295,10 @@ export default async function TraineePage() {
                         ) : isPendingVerification ? (
                           <p className="text-xs font-medium text-warning">
                             Pending confirmation · {inr(employmentRecord.monthlyWage)}/mo
+                          </p>
+                        ) : isDisputed ? (
+                          <p className="text-xs font-medium text-destructive">
+                            Disputed · {inr(employmentRecord.monthlyWage)}/mo
                           </p>
                         ) : (
                           <p className="text-xs font-medium text-destructive">

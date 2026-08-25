@@ -2,6 +2,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import EmploymentRecord, {
   type VerificationStatus,
   type EmploymentType,
+  type TrainingRelevance,
 } from "@/models/employment-record";
 import { isValidObjectId } from "mongoose";
 import { type NextRequest } from "next/server";
@@ -103,6 +104,24 @@ export async function PATCH(
             ? new Date(body.verificationMetadata.verifiedAt)
             : new Date();
       }
+    }
+
+    if (body.trainingRelevance !== undefined) {
+      const validTrainingRelevances: TrainingRelevance[] = [
+        "directly_related",
+        "partially_related",
+        "unrelated",
+      ];
+      if (!validTrainingRelevances.includes(body.trainingRelevance)) {
+        return Response.json(
+          {
+            success: false,
+            error: `Invalid trainingRelevance. Must be one of: ${validTrainingRelevances.join(", ")}`,
+          },
+          { status: 400 }
+        );
+      }
+      updateData.trainingRelevance = body.trainingRelevance;
     }
 
     if (body.verificationMetadata) {
