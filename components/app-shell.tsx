@@ -162,9 +162,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const PersonaIcon = activePersona.icon
 
   return (
-    <div className="flex min-h-screen w-full bg-slate-50">
+    <div className="flex min-h-screen w-full bg-slate-50 lg:h-screen lg:min-h-0 lg:overflow-hidden">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-64 shrink-0 flex-col justify-between border-r border-slate-200 bg-white">
+      <aside className="hidden lg:flex w-64 shrink-0 flex-col justify-between border-r border-slate-200 bg-white lg:h-full lg:min-h-0 lg:overflow-y-auto">
         <div className="flex flex-col gap-5 p-3">
           <Brand />
 
@@ -317,7 +317,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex min-w-0 flex-1 flex-col overflow-x-hidden">
+      <div className="flex min-w-0 flex-1 flex-col overflow-x-hidden lg:h-full lg:min-h-0">
         {/* Mobile Header */}
         <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur lg:hidden">
           <div className="flex items-center justify-between px-4 py-2.5">
@@ -372,7 +372,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Global Desktop Persona Header Strip with safe wrapping & truncation */}
-        <div className="hidden lg:flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-100/70 px-4 xl:px-6 py-2 text-xs">
+        <div className="hidden lg:flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-100/70 px-4 xl:px-6 py-2 text-xs">
           <div className="flex min-w-0 flex-1 items-center gap-2 xl:gap-3">
             <div className="flex shrink-0 items-center gap-1.5 font-medium text-slate-600">
               <ShieldCheck className="size-4 text-blue-700" />
@@ -400,7 +400,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        <main className="flex-1 min-w-0">{children}</main>
+        <main className="flex-1 min-w-0 lg:min-h-0 lg:overflow-y-auto">{children}</main>
       </div>
     </div>
   )
