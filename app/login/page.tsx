@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import {
   Building2,
@@ -201,8 +202,15 @@ export default function LoginPage() {
       <header className="border-b border-slate-200 bg-white shadow-xs">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-blue-700 text-white shadow-xs">
-              <Activity className="size-5" aria-hidden="true" />
+            <div className="relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white border border-slate-200 shadow-xs">
+              <Image
+                src="/favicon1.png"
+                alt="KaushalPulse"
+                width={40}
+                height={40}
+                className="size-full object-contain p-0.5"
+                priority
+              />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -233,6 +241,17 @@ export default function LoginPage() {
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="flex flex-col items-center text-center">
+          <div className="mb-3 flex size-14 items-center justify-center overflow-hidden rounded-2xl bg-white border border-slate-200 shadow-sm p-1">
+            <Image
+              src="/favicon1.png"
+              alt="KaushalPulse"
+              width={56}
+              height={56}
+              className="size-full object-contain"
+              priority
+            />
+          </div>
+
           <div className="mb-3.5 inline-flex items-center gap-2 rounded-full border border-blue-300 bg-blue-100/90 px-4 py-1 text-xs font-bold text-blue-900 shadow-2xs">
             <Sparkles className="size-3.5 text-blue-700" />
             <span>Maharashtra Longitudinal Skilling Outcomes</span>

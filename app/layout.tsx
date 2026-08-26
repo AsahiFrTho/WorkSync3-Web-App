@@ -18,6 +18,15 @@ export const metadata: Metadata = {
   description:
     'Longitudinal skilling-outcomes and impact-measurement platform for Maharashtra: training, certification, placement, wage progression, and retention.',
   generator: 'v0.app',
+  icons: {
+    icon: [
+      { url: '/favicon1.png', sizes: 'any' },
+    ],
+    apple: [
+      { url: '/favicon1.png' },
+    ],
+    shortcut: ['/favicon1.png'],
+  },
 }
 
 export const viewport: Viewport = {

@@ -2,6 +2,7 @@
 
 import type * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard,
@@ -141,14 +142,21 @@ function getPersonaForPath(pathname: string): DemoPersona {
 function Brand() {
   return (
     <Link href="/" className="flex items-center gap-2.5 px-3 py-2 text-foreground group">
-      <div className="flex size-9 items-center justify-center rounded-xl bg-blue-700 text-white font-bold shadow-xs">
-        <span className="text-base tracking-tighter">KP</span>
+      <div className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white border border-slate-200 shadow-xs">
+        <Image
+          src="/favicon1.png"
+          alt="KaushalPulse"
+          width={36}
+          height={36}
+          className="size-full object-contain p-0.5"
+          priority
+        />
       </div>
-      <div className="flex flex-col leading-tight">
+      <div className="flex flex-col leading-tight min-w-0">
         <span className="text-sm font-bold tracking-tight text-slate-950">
           KAUSHAL
         </span>
-        <span className="text-[10px] font-medium text-slate-600">
+        <span className="text-[10px] font-medium text-slate-600 truncate">
           Skilling Outcomes & Intelligence
         </span>
       </div>
