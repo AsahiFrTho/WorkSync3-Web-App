@@ -52,7 +52,7 @@ export function EmployerDemandChart() {
                   color: 'var(--popover-foreground)',
                   fontSize: 12,
                 }}
-                formatter={(v: number) => [v.toLocaleString('en-IN'), 'Openings']}
+                formatter={(v) => [typeof v === 'number' ? v.toLocaleString('en-IN') : String(v ?? ''), 'Openings']}
               />
               <Bar dataKey="openings" radius={[0, 6, 6, 0]} barSize={18}>
                 {employerDemandedSkills.map((entry, i) => (

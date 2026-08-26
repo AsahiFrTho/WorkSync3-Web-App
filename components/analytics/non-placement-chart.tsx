@@ -45,7 +45,7 @@ export function NonPlacementChart() {
                     color: 'var(--popover-foreground)',
                     fontSize: 12,
                   }}
-                  formatter={(v: number, n) => [`${v}%`, n as string]}
+                  formatter={(v, n) => [typeof v === 'number' ? `${v}%` : String(v ?? ''), n ?? '']}
                 />
               </PieChart>
             </ResponsiveContainer>

@@ -40,7 +40,7 @@ export function EmploymentTypeChart() {
                     color: 'var(--popover-foreground)',
                     fontSize: 12,
                   }}
-                  formatter={(v: number, n) => [v.toLocaleString('en-IN'), n as string]}
+                  formatter={(v, n) => [typeof v === 'number' ? v.toLocaleString('en-IN') : String(v ?? ''), n ?? '']}
                 />
               </PieChart>
             </ResponsiveContainer>

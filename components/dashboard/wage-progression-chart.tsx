@@ -52,7 +52,7 @@ export function WageProgressionChart() {
                   color: 'var(--popover-foreground)',
                   fontSize: 12,
                 }}
-                formatter={(v: number) => [inr(v), 'Median wage']}
+                formatter={(v) => [typeof v === 'number' ? inr(v) : String(v ?? ''), 'Median wage']}
               />
               <Area
                 type="monotone"
