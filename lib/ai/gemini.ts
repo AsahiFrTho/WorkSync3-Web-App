@@ -1,12 +1,21 @@
-﻿import "server-only";
+import "server-only";
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.GEMINI_API_KEY;
+let geminiClientInstance: GoogleGenAI | null = null;
 
-if (!apiKey) {
-  throw new Error("GEMINI_API_KEY is not configured");
+export function getGeminiClient(): GoogleGenAI | null {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey || !apiKey.trim()) {
+    return null;
+  }
+  if (!geminiClientInstance) {
+    geminiClientInstance = new GoogleGenAI({
+      apiKey: apiKey.trim(),
+    });
+  }
+  return geminiClientInstance;
 }
 
-export const gemini = new GoogleGenAI({
-  apiKey,
-});
+export const gemini = process.env.GEMINI_API_KEY
+  ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY.trim() })
+  : (null as unknown as GoogleGenAI);

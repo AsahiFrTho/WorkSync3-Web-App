@@ -76,7 +76,6 @@ export interface INormalizedTraineeEvidence {
 
 /**
  * AI Career Intelligence Result Schema
- * Groundwork for Phase 3 Step 3+ integration.
  */
 export interface IAICareerIntelligenceResult {
   traineeId: string;
@@ -93,4 +92,5 @@ export interface IAICareerIntelligenceResult {
     rationale: string;
   };
   evidenceUsed: string[];
+  source?: "gemini" | "evidence-fallback";
 }

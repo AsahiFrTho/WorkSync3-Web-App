@@ -11,6 +11,7 @@ import {
   FileCheck,
   AlertTriangle,
   RefreshCw,
+  Cpu,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -23,28 +24,30 @@ interface CareerIntelligenceCardProps {
 }
 
 const outcomeVariantMap: Record<string, 'success' | 'warning' | 'destructive' | 'neutral' | 'default'> = {
-  'Direct Trade Placement': 'success',
-  'Related Sector Role': 'default',
-  'Unrelated Role': 'warning',
-  'Wage Progression Verified': 'success',
-  'High Retention Risk': 'destructive',
-  'Underemployed': 'warning',
+  'Strong': 'success',
+  'Positive': 'success',
+  'Moderate': 'neutral',
+  'Needs Attention': 'warning',
+  'At Risk': 'destructive',
 }
 
 const alignmentVariantMap: Record<string, 'success' | 'warning' | 'destructive' | 'neutral'> = {
-  'High Alignment': 'success',
-  'Moderate Alignment': 'warning',
-  'Low Alignment': 'destructive',
+  'Direct Match': 'success',
+  'Partial Match': 'warning',
+  'Unrelated': 'destructive',
+  'Mismatched': 'destructive',
 }
 
 const riskVariantMap: Record<string, 'success' | 'warning' | 'destructive' | 'neutral'> = {
   'Low': 'success',
   'Moderate': 'warning',
   'High': 'destructive',
+  'Critical': 'destructive',
 }
 
 export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProps) {
   const [data, setData] = useState<IAICareerIntelligenceResult | null>(null)
+  const [source, setSource] = useState<'gemini' | 'evidence-fallback'>('gemini')
   const [loading, setLoading] = useState(true)
   const [errorStatus, setErrorStatus] = useState<number | null>(null)
 
@@ -60,6 +63,11 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
       const json = await res.json()
       if (json.success && json.data) {
         setData(json.data)
+        if (json.source) {
+          setSource(json.source)
+        }
+      } else if (json.traineeId) {
+        setData(json)
       } else {
         setErrorStatus(500)
       }
@@ -80,6 +88,8 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
       : (Object.values(data.evidenceUsed) as string[])
     : []
 
+  const isFallback = source === 'evidence-fallback'
+
   return (
     <Card className="overflow-hidden border border-slate-200 bg-white shadow-xs">
       {/* Header Banner */}
@@ -98,9 +108,17 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
               </CardDescription>
             </div>
           </div>
-          <Badge variant="default" className="border-purple-300 bg-purple-100 text-purple-950 font-bold text-[11px] shrink-0">
-            Policy AI
-          </Badge>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <Badge variant="default" className="border-purple-300 bg-purple-100 text-purple-950 font-bold text-[11px]">
+              {isFallback ? (
+                <span className="flex items-center gap-1">
+                  <Cpu className="size-3 text-purple-700" /> Evidence Synthesis
+                </span>
+              ) : (
+                'Policy AI'
+              )}
+            </Badge>
+          </div>
         </div>
       </CardHeader>
 
@@ -129,7 +147,7 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
                 Career Intelligence Unavailable
               </p>
               <p className="max-w-md text-xs font-medium text-slate-700">
-                The career intelligence engine could not process this request at this time. Please retry.
+                The career intelligence engine could not locate records for this candidate. Please ensure database is seeded.
               </p>
             </div>
             <Button
@@ -275,7 +293,9 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
                 </div>
               )}
               <div className="mt-1 pt-2 border-t border-slate-200 text-[11px] text-slate-500 font-medium italic">
-                AI-generated from available verified training, employment, verification, and wage evidence.
+                {isFallback
+                  ? 'Synthesized from verified training, employment, verification, and wage evidence (evidence-grounded fallback mode).'
+                  : 'AI-generated from available verified training, employment, verification, and wage evidence.'}
               </div>
             </div>
           </div>
