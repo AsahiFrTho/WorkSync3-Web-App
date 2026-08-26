@@ -6,28 +6,33 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const traineeId = searchParams.get("traineeId");
 
-    if (!traineeId) {
+    if (!traineeId || !traineeId.trim()) {
       return NextResponse.json(
-        { error: "traineeId is required" },
+        { success: false, error: "traineeId parameter is required" },
         { status: 400 }
       );
     }
 
-    const result = await generateCareerIntelligence(traineeId);
+    const { result, notFound, source } = await generateCareerIntelligence(traineeId);
 
-    if (!result) {
+    if (notFound || !result) {
       return NextResponse.json(
-        { error: "Career intelligence could not be generated" },
+        { success: false, error: `Trainee record '${traineeId}' not found in database` },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(result);
+    return NextResponse.json({
+      success: true,
+      data: result,
+      source,
+    });
   } catch (error) {
-    console.error("Career intelligence API error:", error);
+    const safeErrorMessage = error instanceof Error ? error.message : "Internal server error";
+    console.error("Career intelligence API error:", safeErrorMessage);
 
     return NextResponse.json(
-      { error: "Failed to generate career intelligence" },
+      { success: false, error: "Failed to generate career intelligence" },
       { status: 500 }
     );
   }
