@@ -2,3 +2,6 @@ allowBuilds:
   '@google/genai': true
   msw: true
   protobufjs: true
+
+overrides:
+  hono: 4.12.25
