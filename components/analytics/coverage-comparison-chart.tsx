@@ -22,11 +22,11 @@ export function CoverageComparisonChart({ courseFilter }: { courseFilter?: strin
 
   return (
     <Card className="border border-slate-200/90 bg-white shadow-xs rounded-xl overflow-hidden">
-      <CardHeader className="border-b border-slate-100 bg-slate-50/50 pb-4">
-        <CardTitle className="text-base font-extrabold text-slate-950 font-sans">
+      <CardHeader className="border-b border-slate-100 bg-slate-50/70 pb-3.5">
+        <CardTitle className="text-base font-bold text-slate-950 font-sans">
           Course-to-Skill Alignment
         </CardTitle>
-        <CardDescription className="text-xs font-semibold text-slate-600 mt-0.5">
+        <CardDescription className="text-xs font-normal text-slate-500 mt-0.5">
           Comparative index: Institutional training volume vs. Industry job demand
         </CardDescription>
       </CardHeader>
@@ -51,20 +51,20 @@ export function CoverageComparisonChart({ courseFilter }: { courseFilter?: strin
               <Tooltip
                 cursor={{ fill: '#f8fafc' }}
                 contentStyle={{
-                  borderRadius: 10,
+                  borderRadius: 8,
                   border: '1px solid #cbd5e1',
                   background: '#0f172a',
                   color: '#ffffff',
                   fontSize: 12,
-                  fontWeight: 700,
-                  padding: '8px 12px',
+                  fontWeight: 600,
+                  padding: '6px 10px',
                 }}
               />
-              <Legend wrapperStyle={{ fontSize: 12, fontWeight: 700, color: '#334155', paddingTop: 10 }} />
+              <Legend wrapperStyle={{ fontSize: 12, fontWeight: 600, color: '#334155', paddingTop: 10 }} />
               <Bar
                 dataKey="trainingCoverage"
                 name="Training Coverage"
-                fill="#4f46e5"
+                fill="#4338ca"
                 radius={[4, 4, 0, 0]}
               />
               <Bar

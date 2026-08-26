@@ -123,7 +123,7 @@ const roles: RoleOption[] = [
   {
     id: 'employer',
     title: 'Employer',
-    marathiTitle: 'रोजगारदाता / उद्योग',
+    marathiTitle: 'नियोक्ता / उद्योग भागीदार',
     category: 'Industry & Hiring Partners',
     targetHref: '/employer',
     icon: Briefcase,
@@ -155,7 +155,7 @@ const roles: RoleOption[] = [
   {
     id: 'trainee',
     title: 'Trainee',
-    marathiTitle: 'प्रशिक्षणार्थी',
+    marathiTitle: 'प्रशिक्षणार्थी उमेदवार',
     category: 'Certified Candidate & Alumni',
     targetHref: '/trainee',
     icon: IdCard,

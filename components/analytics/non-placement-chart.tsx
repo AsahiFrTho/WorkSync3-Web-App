@@ -6,20 +6,20 @@ import { nonPlacementReasons } from '@/lib/mock-data'
 
 const COLORS = [
   '#e11d48',
-  '#f59e0b',
-  '#2563eb',
-  '#4f46e5',
+  '#d97706',
+  '#1d4ed8',
+  '#4338ca',
   '#64748b',
 ]
 
 export function NonPlacementChart() {
   return (
     <Card className="border border-slate-200/90 bg-white shadow-xs rounded-xl overflow-hidden">
-      <CardHeader className="border-b border-slate-100 bg-slate-50/50 pb-4">
-        <CardTitle className="text-base font-extrabold text-slate-950 font-sans">
+      <CardHeader className="border-b border-slate-100 bg-slate-50/70 pb-3.5">
+        <CardTitle className="text-base font-bold text-slate-950 font-sans">
           Root Causes for Non-Placement
         </CardTitle>
-        <CardDescription className="text-xs font-semibold text-slate-600 mt-0.5">
+        <CardDescription className="text-xs font-normal text-slate-500 mt-0.5">
           Share of certified-but-unplaced candidates across cohort
         </CardDescription>
       </CardHeader>
@@ -44,13 +44,13 @@ export function NonPlacementChart() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    borderRadius: 10,
+                    borderRadius: 8,
                     border: '1px solid #cbd5e1',
                     background: '#0f172a',
                     color: '#ffffff',
                     fontSize: 12,
-                    fontWeight: 700,
-                    padding: '8px 12px',
+                    fontWeight: 600,
+                    padding: '6px 10px',
                   }}
                   formatter={(v, n) => [typeof v === 'number' ? `${v}%` : String(v ?? ''), n ?? '']}
                 />
@@ -60,15 +60,15 @@ export function NonPlacementChart() {
           <ul className="flex flex-1 flex-col gap-2.5 w-full">
             {nonPlacementReasons.map((r, i) => (
               <li key={r.reason} className="flex items-center justify-between gap-2 text-xs sm:text-sm border-b border-slate-100 pb-2 last:border-0 last:pb-0">
-                <span className="flex items-center gap-2 font-bold text-slate-900">
+                <span className="flex items-center gap-2 font-medium text-slate-900">
                   <span
-                    className="size-2.5 rounded-full shrink-0 shadow-xs"
+                    className="size-2 rounded-full shrink-0"
                     style={{ background: COLORS[i % COLORS.length] }}
                     aria-hidden="true"
                   />
                   <span>{r.reason}</span>
                 </span>
-                <span className="tabular-nums font-black text-slate-950 text-xs sm:text-sm">{r.value}%</span>
+                <span className="tabular-nums font-bold text-slate-950 text-xs sm:text-sm">{r.value}%</span>
               </li>
             ))}
           </ul>

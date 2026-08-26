@@ -26,7 +26,7 @@ const stakeholderPortals = [
     icon: LayoutDashboard,
     hint: 'State-wide macro metrics',
     roleBadge: 'Admin',
-    badgeColor: 'bg-blue-100/90 text-blue-900 border-blue-300 font-bold',
+    badgeColor: 'bg-blue-100 text-blue-900 border-blue-200 font-bold',
   },
   {
     label: 'Training Provider',
@@ -34,7 +34,7 @@ const stakeholderPortals = [
     icon: LineChart,
     hint: 'Skill gaps & performance',
     roleBadge: 'Provider',
-    badgeColor: 'bg-indigo-100/90 text-indigo-900 border-indigo-300 font-bold',
+    badgeColor: 'bg-indigo-100 text-indigo-900 border-indigo-200 font-bold',
   },
   {
     label: 'Employer Portal',
@@ -42,7 +42,7 @@ const stakeholderPortals = [
     icon: Building2,
     hint: 'Join & wage verification',
     roleBadge: 'Employer',
-    badgeColor: 'bg-emerald-100/90 text-emerald-900 border-emerald-300 font-bold',
+    badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-200 font-bold',
   },
   {
     label: 'Trainee Passport',
@@ -50,7 +50,7 @@ const stakeholderPortals = [
     icon: UserCheck,
     hint: 'Verifiable outcome record',
     roleBadge: 'Trainee',
-    badgeColor: 'bg-amber-100/90 text-amber-950 border-amber-300 font-bold',
+    badgeColor: 'bg-amber-100 text-amber-950 border-amber-200 font-bold',
   },
 ]
 
@@ -62,7 +62,7 @@ const intelligenceTools = [
     icon: Sparkles,
     hint: 'Automated policy signals',
     roleBadge: 'Policy AI',
-    badgeColor: 'bg-purple-100/90 text-purple-950 border-purple-300 font-bold',
+    badgeColor: 'bg-purple-100 text-purple-950 border-purple-200 font-bold',
   },
 ]
 
@@ -139,30 +139,29 @@ function getPersonaForPath(pathname: string): DemoPersona {
   }
 }
 
-function Brand() {
+function Brand({ compactOnMobile }: { compactOnMobile?: boolean } = {}) {
   return (
-    <Link href="/dashboard" className="flex items-center gap-3 px-2 py-1 text-foreground group">
-      <div className="relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white border border-slate-200 shadow-xs transition-transform duration-200 group-hover:scale-105">
+    <Link href="/dashboard" className="flex items-center gap-2.5 px-1 py-1 text-foreground group min-w-0">
+      <div className="relative flex size-9 sm:size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white border border-slate-200 shadow-xs transition-transform duration-200 group-hover:scale-105">
         <Image
           src="/favicon1.png"
           alt="KaushalPulse"
-          width={40}
-          height={40}
+          width={36}
+          height={36}
           className="size-full object-contain p-0.5"
           priority
         />
       </div>
       <div className="flex flex-col leading-tight min-w-0">
         <div className="flex items-center gap-1.5">
-          <span className="text-base font-black tracking-tight text-slate-950 font-sans">
+          <span className="text-sm sm:text-base font-extrabold tracking-tight text-slate-950 font-sans">
             KAUSHAL<span className="text-blue-700">PULSE</span>
           </span>
         </div>
-        <span className="text-[10px] font-semibold text-slate-600 truncate">
+        <span className="text-[9px] sm:text-[10px] font-semibold text-slate-600 truncate">
           Skilling Outcomes & Intelligence
         </span>
-        {/* Subtle Institutional Tricolor Accent Line */}
-        <div className="mt-1 h-0.5 w-full rounded-full bg-gradient-to-r from-orange-500 via-slate-300 to-emerald-600 opacity-70" />
+        <div className="mt-0.5 sm:mt-1 h-0.5 w-full rounded-full bg-gradient-to-r from-orange-500 via-slate-300 to-emerald-600 opacity-70" />
       </div>
     </Link>
   )
@@ -174,16 +173,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const PersonaIcon = activePersona.icon
 
   return (
-    <div className="flex min-h-screen w-full bg-slate-50 lg:h-screen lg:min-h-0 lg:overflow-hidden">
-      {/* Desktop Sidebar (Government Command Navigation) */}
-      <aside className="hidden lg:flex w-64 shrink-0 flex-col justify-between border-r border-slate-200/90 bg-white lg:h-full lg:min-h-0 lg:overflow-y-auto shadow-2xs">
-        <div className="flex flex-col gap-6 p-4">
+    <div className="flex min-h-screen w-full bg-slate-100/60 lg:h-screen lg:min-h-0 lg:overflow-hidden">
+      {/* Desktop Sidebar (Government Command Rail) */}
+      <aside className="hidden lg:flex w-64 shrink-0 flex-col justify-between border-r border-slate-200/90 bg-slate-50/90 backdrop-blur lg:h-full lg:min-h-0 lg:overflow-y-auto shadow-2xs">
+        <div className="flex flex-col gap-5 p-4">
           <Brand />
 
           {/* Stakeholder Portals Group */}
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between px-2.5">
-              <p className="text-[10px] font-extrabold tracking-widest text-slate-500 uppercase">
+              <p className="text-[10px] font-bold tracking-widest text-slate-500 uppercase">
                 Stakeholder Portals
               </p>
               <span className="size-1.5 rounded-full bg-blue-600" aria-hidden="true" />
@@ -198,10 +197,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     href={item.href}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
-                      'group flex items-start justify-between rounded-lg px-3 py-2.5 text-xs transition-all duration-150',
+                      'group flex items-start justify-between rounded-lg px-3 py-2 text-xs transition-all duration-150',
                       active
-                        ? 'border-l-4 border-blue-700 bg-blue-50/90 text-blue-950 font-bold shadow-2xs'
-                        : 'border-l-4 border-transparent text-slate-700 hover:bg-slate-50 hover:text-slate-950 font-medium',
+                        ? 'border-l-4 border-blue-700 bg-white text-blue-950 font-bold shadow-xs'
+                        : 'border-l-4 border-transparent text-slate-700 hover:bg-slate-200/60 hover:text-slate-950 font-medium',
                     )}
                   >
                     <div className="flex items-start gap-2.5 min-w-0">
@@ -238,7 +237,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {/* Intelligence & AI Signals Group */}
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between px-2.5">
-              <p className="text-[10px] font-extrabold tracking-widest text-slate-500 uppercase">
+              <p className="text-[10px] font-bold tracking-widest text-slate-500 uppercase">
                 Intelligence & Signals
               </p>
               <span className="size-1.5 rounded-full bg-purple-600" aria-hidden="true" />
@@ -253,10 +252,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     href={item.href}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
-                      'group flex items-start justify-between rounded-lg px-3 py-2.5 text-xs transition-all duration-150',
+                      'group flex items-start justify-between rounded-lg px-3 py-2 text-xs transition-all duration-150',
                       active
-                        ? 'border-l-4 border-purple-700 bg-purple-50/90 text-purple-950 font-bold shadow-2xs'
-                        : 'border-l-4 border-transparent text-slate-700 hover:bg-slate-50 hover:text-slate-950 font-medium',
+                        ? 'border-l-4 border-purple-700 bg-white text-purple-950 font-bold shadow-xs'
+                        : 'border-l-4 border-transparent text-slate-700 hover:bg-slate-200/60 hover:text-slate-950 font-medium',
                     )}
                   >
                     <div className="flex items-start gap-2.5 min-w-0">
@@ -292,10 +291,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Desktop Sidebar Footer / Active Persona Command Badge */}
-        <div className="border-t border-slate-200 bg-slate-50/80 p-3.5 space-y-2.5">
-          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-2xs">
-            <div className="flex items-center justify-between gap-1 mb-1">
-              <span className="flex items-center gap-1.5 text-[10px] font-extrabold tracking-wider text-slate-500 uppercase">
+        <div className="border-t border-slate-200 bg-slate-100/70 p-3.5 space-y-2.5">
+          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-xs">
+            <div className="flex items-center justify-between gap-1 mb-1.5">
+              <span className="flex items-center gap-1.5 text-[10px] font-bold tracking-wider text-slate-500 uppercase">
                 <span className="size-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
                 Active Session
               </span>
@@ -309,10 +308,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 {PersonaIcon && <PersonaIcon className="size-4" />}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-black text-slate-950">
+                <p className="truncate text-xs font-bold text-slate-950">
                   {activePersona.name}
                 </p>
-                <p className="truncate text-[10px] font-semibold text-slate-600">
+                <p className="truncate text-[10px] font-medium text-slate-600">
                   {activePersona.organization}
                 </p>
               </div>
@@ -321,13 +320,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
           <Link
             href="/login"
-            className="flex items-center justify-between rounded-lg border border-blue-300 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-900 shadow-2xs transition-colors hover:bg-blue-100 hover:text-blue-950"
+            className="flex items-center justify-between rounded-lg border border-blue-200 bg-blue-50/90 px-3 py-2 text-xs font-bold text-blue-900 shadow-2xs transition-colors hover:bg-blue-100 hover:text-blue-950"
           >
             <span className="flex items-center gap-1.5">
               <ArrowLeftRight className="size-3.5 text-blue-700" />
               <span>Switch Demo Role</span>
             </span>
-            <span className="rounded bg-blue-200/90 px-1.5 py-0.5 text-[9px] font-extrabold text-blue-950">
+            <span className="rounded bg-blue-200/90 px-1.5 py-0.5 text-[9px] font-bold text-blue-950">
               Select
             </span>
           </Link>
@@ -339,14 +338,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex min-w-0 flex-1 flex-col overflow-x-hidden lg:h-full lg:min-h-0">
+      <div className="flex min-w-0 flex-1 flex-col overflow-x-hidden lg:h-full lg:min-h-0 bg-slate-100/60">
         {/* Mobile Header */}
         <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur lg:hidden">
-          <div className="flex items-center justify-between px-4 py-2.5">
-            <Brand />
+          <div className="flex items-center justify-between gap-2 px-3 py-2 sm:px-4 sm:py-2.5">
+            <Brand compactOnMobile />
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-900 shadow-2xs hover:bg-blue-100"
+              className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-2 py-1 text-[11px] sm:text-xs font-bold text-blue-900 shadow-2xs hover:bg-blue-100"
             >
               <ArrowLeftRight className="size-3 text-blue-700" />
               <span>Switch Role</span>
@@ -358,7 +357,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-1.5 min-w-0">
               {PersonaIcon && <PersonaIcon className="size-3.5 text-blue-700 shrink-0" />}
               <span className="truncate text-slate-700 font-medium">
-                Persona: <strong className="text-slate-950">{activePersona.name}</strong>
+                Persona: <strong className="text-slate-950 font-bold">{activePersona.name}</strong>
               </span>
             </div>
             <span className={cn('ml-2 rounded px-1.5 py-0.2 text-[9px] font-bold border shrink-0', activePersona.badgeClass)}>
@@ -400,22 +399,22 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <ShieldCheck className="size-3.5" />
               </span>
               <span>
-                Active Stakeholder: <strong className="text-slate-950 font-extrabold">{activePersona.roleTitle}</strong>
+                Active Stakeholder: <strong className="text-slate-950 font-bold">{activePersona.roleTitle}</strong>
               </span>
             </div>
             <span className="text-slate-300">|</span>
-            <span className="truncate text-slate-700 font-semibold">
+            <span className="truncate text-slate-700 font-medium">
               {activePersona.name} <span className="text-slate-500 font-normal">({activePersona.organization})</span>
             </span>
           </div>
 
           <div className="flex shrink-0 items-center gap-2.5">
-            <span className={cn('rounded px-2 py-0.5 text-[10px] font-extrabold border', activePersona.badgeClass)}>
+            <span className={cn('rounded px-2 py-0.5 text-[10px] font-bold border', activePersona.badgeClass)}>
               {activePersona.roleCategory}
             </span>
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 font-bold text-blue-700 hover:text-blue-900 bg-blue-50 border border-blue-200/80 px-2.5 py-1 rounded-md text-xs transition-colors hover:bg-blue-100"
+              className="inline-flex items-center gap-1.5 font-bold text-blue-700 hover:text-blue-900 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-md text-xs transition-colors hover:bg-blue-100"
             >
               <ArrowLeftRight className="size-3 text-blue-700" />
               <span>Switch Role</span>
