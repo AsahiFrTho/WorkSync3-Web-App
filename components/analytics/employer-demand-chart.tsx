@@ -15,12 +15,16 @@ import { employerDemandedSkills } from '@/lib/mock-data'
 
 export function EmployerDemandChart() {
   return (
-    <Card className="border border-slate-200 bg-white shadow-xs">
-      <CardHeader>
-        <CardTitle className="text-base font-bold text-slate-950">Employer-Demanded Skills</CardTitle>
-        <CardDescription className="text-xs text-slate-600">Open verified positions reported across employer network</CardDescription>
+    <Card className="border border-slate-200/90 bg-white shadow-xs rounded-xl overflow-hidden">
+      <CardHeader className="border-b border-slate-100 bg-slate-50/50 pb-4">
+        <CardTitle className="text-base font-extrabold text-slate-950 font-sans">
+          Industry Verified Demand
+        </CardTitle>
+        <CardDescription className="text-xs font-semibold text-slate-600 mt-0.5">
+          Open verified positions reported across employer network
+        </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-4">
         <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
@@ -32,32 +36,33 @@ export function EmployerDemandChart() {
               <XAxis
                 type="number"
                 tickLine={false}
-                axisLine={false}
+                axisLine={{ stroke: '#cbd5e1' }}
                 tick={{ fontSize: 11, fill: '#475569', fontWeight: 600 }}
               />
               <YAxis
                 type="category"
                 dataKey="skill"
-                width={120}
+                width={130}
                 tickLine={false}
                 axisLine={false}
-                tick={{ fontSize: 11, fill: '#0f172a', fontWeight: 600 }}
+                tick={{ fontSize: 11, fill: '#0f172a', fontWeight: 700 }}
               />
               <Tooltip
                 cursor={{ fill: '#f1f5f9' }}
                 contentStyle={{
                   borderRadius: 10,
                   border: '1px solid #cbd5e1',
-                  background: '#ffffff',
-                  color: '#0f172a',
+                  background: '#0f172a',
+                  color: '#ffffff',
                   fontSize: 12,
-                  fontWeight: 600,
+                  fontWeight: 700,
+                  padding: '8px 12px',
                 }}
-                formatter={(v) => [typeof v === 'number' ? v.toLocaleString('en-IN') : String(v ?? ''), 'Openings']}
+                formatter={(v) => [typeof v === 'number' ? v.toLocaleString('en-IN') + ' Openings' : String(v ?? ''), 'Demand']}
               />
               <Bar dataKey="openings" radius={[0, 6, 6, 0]} barSize={18}>
                 {employerDemandedSkills.map((entry, i) => (
-                  <Cell key={entry.skill} fill={i < 4 ? '#1d4ed8' : '#4f46e5'} />
+                  <Cell key={entry.skill} fill={i < 3 ? '#1d4ed8' : '#4f46e5'} />
                 ))}
               </Bar>
             </BarChart>

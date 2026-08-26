@@ -21,12 +21,16 @@ export function CoverageComparisonChart({ courseFilter }: { courseFilter?: strin
   const view = data.length ? data : courseToSkillComparison
 
   return (
-    <Card className="border border-slate-200 bg-white shadow-xs">
-      <CardHeader>
-        <CardTitle className="text-base font-bold text-slate-950">Course-to-Skill Comparison</CardTitle>
-        <CardDescription className="text-xs text-slate-600">Training coverage vs. employer demand index by course</CardDescription>
+    <Card className="border border-slate-200/90 bg-white shadow-xs rounded-xl overflow-hidden">
+      <CardHeader className="border-b border-slate-100 bg-slate-50/50 pb-4">
+        <CardTitle className="text-base font-extrabold text-slate-950 font-sans">
+          Course-to-Skill Alignment
+        </CardTitle>
+        <CardDescription className="text-xs font-semibold text-slate-600 mt-0.5">
+          Comparative index: Institutional training volume vs. Industry job demand
+        </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-4">
         <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={view} margin={{ left: 0, right: 8, top: 4, bottom: 4 }}>
@@ -34,7 +38,7 @@ export function CoverageComparisonChart({ courseFilter }: { courseFilter?: strin
               <XAxis
                 dataKey="course"
                 tickLine={false}
-                axisLine={false}
+                axisLine={{ stroke: '#cbd5e1' }}
                 interval={0}
                 tick={{ fontSize: 11, fill: '#475569', fontWeight: 600 }}
               />
@@ -45,18 +49,18 @@ export function CoverageComparisonChart({ courseFilter }: { courseFilter?: strin
                 tick={{ fontSize: 11, fill: '#475569', fontWeight: 600 }}
               />
               <Tooltip
-                cursor={{ fill: '#f1f5f9' }}
+                cursor={{ fill: '#f8fafc' }}
                 contentStyle={{
                   borderRadius: 10,
                   border: '1px solid #cbd5e1',
-                  background: '#ffffff',
-                  color: '#0f172a',
+                  background: '#0f172a',
+                  color: '#ffffff',
                   fontSize: 12,
-                  fontWeight: 600,
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                  fontWeight: 700,
+                  padding: '8px 12px',
                 }}
               />
-              <Legend wrapperStyle={{ fontSize: 12, fontWeight: 600, color: '#334155', paddingTop: 8 }} />
+              <Legend wrapperStyle={{ fontSize: 12, fontWeight: 700, color: '#334155', paddingTop: 10 }} />
               <Bar
                 dataKey="trainingCoverage"
                 name="Training Coverage"

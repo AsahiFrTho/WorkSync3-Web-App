@@ -1,3 +1,5 @@
+'use client'
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
@@ -7,48 +9,58 @@ import {
   providerPerformance,
   inr,
 } from '@/lib/mock-data'
+import { Star, Award, Building2 } from 'lucide-react'
 
 function DemandBadge({ level }: { level: 'High' | 'Medium' | 'Low' }) {
   const variant = level === 'High' ? 'success' : level === 'Medium' ? 'warning' : 'neutral'
-  return <Badge variant={variant}>{level}</Badge>
+  return <Badge variant={variant} className="font-extrabold text-xs px-2.5 py-0.5">{level}</Badge>
 }
 
 export function DistrictTable() {
   return (
-    <Card className="border border-slate-200 bg-white shadow-xs">
-      <CardHeader>
-        <CardTitle className="text-base font-bold text-slate-950">District Performance</CardTitle>
-        <CardDescription className="text-xs text-slate-600">Employment and retention metrics by district</CardDescription>
+    <Card className="border border-slate-200/90 bg-white shadow-xs rounded-xl overflow-hidden">
+      <CardHeader className="border-b border-slate-100 bg-slate-50/50 pb-4">
+        <CardTitle className="text-base font-extrabold text-slate-950 font-sans">
+          District Performance Index
+        </CardTitle>
+        <CardDescription className="text-xs font-semibold text-slate-600 mt-0.5">
+          Longitudinal employment and retention audit by district
+        </CardDescription>
       </CardHeader>
-      <CardContent className="px-0 pb-2">
+      <CardContent className="p-0">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-xs sm:text-sm">
             <thead>
-              <tr className="border-y border-slate-200 bg-slate-50/80 text-left text-xs font-bold uppercase tracking-wider text-slate-600">
-                <th className="px-5 py-2.5">District</th>
-                <th className="px-3 py-2.5 text-right">Trainees</th>
-                <th className="px-3 py-2.5">Employment</th>
-                <th className="px-3 py-2.5 text-right">Retention</th>
-                <th className="px-5 py-2.5 text-right">Avg Wage</th>
+              <tr className="border-b border-slate-200 bg-slate-50/90 text-left text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                <th className="px-5 py-3">District</th>
+                <th className="px-3 py-3 text-right">Trainees</th>
+                <th className="px-4 py-3">Employment Rate</th>
+                <th className="px-3 py-3 text-right">6M Retention</th>
+                <th className="px-5 py-3 text-right">Avg Monthly Wage</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-100">
               {districtPerformance.map((d) => (
-                <tr key={d.district} className="border-b border-slate-100 hover:bg-slate-50/60 transition-colors text-slate-900">
-                  <td className="px-5 py-2.5 font-bold">{d.district}</td>
-                  <td className="px-3 py-2.5 text-right tabular-nums font-medium text-slate-700">
+                <tr key={d.district} className="hover:bg-blue-50/40 transition-colors text-slate-900">
+                  <td className="px-5 py-3 font-bold text-slate-950 text-sm">{d.district}</td>
+                  <td className="px-3 py-3 text-right tabular-nums font-semibold text-slate-700">
                     {d.trainees.toLocaleString('en-IN')}
                   </td>
-                  <td className="px-3 py-2.5">
-                    <div className="flex items-center gap-2">
-                      <Progress value={d.employmentRate} className="w-20" />
-                      <span className="tabular-nums font-semibold text-slate-800">{d.employmentRate}%</span>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="h-2 w-20 overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
+                        <div
+                          className="h-full rounded-full bg-blue-700"
+                          style={{ width: `${d.employmentRate}%` }}
+                        />
+                      </div>
+                      <span className="tabular-nums font-extrabold text-slate-950 text-xs">{d.employmentRate}%</span>
                     </div>
                   </td>
-                  <td className="px-3 py-2.5 text-right tabular-nums font-semibold text-slate-800">
+                  <td className="px-3 py-3 text-right tabular-nums font-extrabold text-slate-800">
                     {d.retentionRate}%
                   </td>
-                  <td className="px-5 py-2.5 text-right tabular-nums font-bold text-slate-950">{inr(d.avgWage)}</td>
+                  <td className="px-5 py-3 text-right tabular-nums font-black text-slate-950">{inr(d.avgWage)}</td>
                 </tr>
               ))}
             </tbody>
@@ -61,38 +73,47 @@ export function DistrictTable() {
 
 export function CourseTable() {
   return (
-    <Card className="border border-slate-200 bg-white shadow-xs">
-      <CardHeader>
-        <CardTitle className="text-base font-bold text-slate-950">Course Performance</CardTitle>
-        <CardDescription className="text-xs text-slate-600">Placement rate and industry demand by trade</CardDescription>
+    <Card className="border border-slate-200/90 bg-white shadow-xs rounded-xl overflow-hidden">
+      <CardHeader className="border-b border-slate-100 bg-slate-50/50 pb-4">
+        <CardTitle className="text-base font-extrabold text-slate-950 font-sans">
+          Course & Trade Performance
+        </CardTitle>
+        <CardDescription className="text-xs font-semibold text-slate-600 mt-0.5">
+          Placement yield and industry demand by vocational qualification
+        </CardDescription>
       </CardHeader>
-      <CardContent className="px-0 pb-2">
+      <CardContent className="p-0">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-xs sm:text-sm">
             <thead>
-              <tr className="border-y border-slate-200 bg-slate-50/80 text-left text-xs font-bold uppercase tracking-wider text-slate-600">
-                <th className="px-5 py-2.5">Course</th>
-                <th className="px-3 py-2.5 text-right">Trainees</th>
-                <th className="px-3 py-2.5">Employment</th>
-                <th className="px-3 py-2.5 text-right">Avg Wage</th>
-                <th className="px-5 py-2.5 text-right">Demand</th>
+              <tr className="border-b border-slate-200 bg-slate-50/90 text-left text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                <th className="px-5 py-3">Course / Trade</th>
+                <th className="px-3 py-3 text-right">Trainees</th>
+                <th className="px-4 py-3">Placement Rate</th>
+                <th className="px-3 py-3 text-right">Avg Wage</th>
+                <th className="px-5 py-3 text-right">Demand</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-100">
               {coursePerformance.map((c) => (
-                <tr key={c.course} className="border-b border-slate-100 hover:bg-slate-50/60 transition-colors text-slate-900">
-                  <td className="px-5 py-2.5 font-bold">{c.course}</td>
-                  <td className="px-3 py-2.5 text-right tabular-nums font-medium text-slate-700">
+                <tr key={c.course} className="hover:bg-blue-50/40 transition-colors text-slate-900">
+                  <td className="px-5 py-3 font-bold text-slate-950 text-sm">{c.course}</td>
+                  <td className="px-3 py-3 text-right tabular-nums font-semibold text-slate-700">
                     {c.trainees.toLocaleString('en-IN')}
                   </td>
-                  <td className="px-3 py-2.5">
-                    <div className="flex items-center gap-2">
-                      <Progress value={c.employmentRate} className="w-20" />
-                      <span className="tabular-nums font-semibold text-slate-800">{c.employmentRate}%</span>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="h-2 w-20 overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
+                        <div
+                          className="h-full rounded-full bg-blue-700"
+                          style={{ width: `${c.employmentRate}%` }}
+                        />
+                      </div>
+                      <span className="tabular-nums font-extrabold text-slate-950 text-xs">{c.employmentRate}%</span>
                     </div>
                   </td>
-                  <td className="px-3 py-2.5 text-right tabular-nums font-bold text-slate-950">{inr(c.avgWage)}</td>
-                  <td className="px-5 py-2.5 text-right">
+                  <td className="px-3 py-3 text-right tabular-nums font-black text-slate-950">{inr(c.avgWage)}</td>
+                  <td className="px-5 py-3 text-right">
                     <DemandBadge level={c.demand} />
                   </td>
                 </tr>
@@ -107,36 +128,57 @@ export function CourseTable() {
 
 export function ProviderTable() {
   return (
-    <Card className="border border-slate-200 bg-white shadow-xs">
-      <CardHeader>
-        <CardTitle className="text-base font-bold text-slate-950">Provider Performance</CardTitle>
-        <CardDescription className="text-xs text-slate-600">Training partners ranked by placement rate</CardDescription>
+    <Card className="border border-slate-200/90 bg-white shadow-xs rounded-xl overflow-hidden">
+      <CardHeader className="border-b border-slate-100 bg-slate-50/50 pb-4">
+        <CardTitle className="text-base font-extrabold text-slate-950 font-sans">
+          Training Provider Ratings
+        </CardTitle>
+        <CardDescription className="text-xs font-semibold text-slate-600 mt-0.5">
+          Accredited training partners ranked by verified placement yield
+        </CardDescription>
       </CardHeader>
-      <CardContent className="px-0 pb-2">
+      <CardContent className="p-0">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-xs sm:text-sm">
             <thead>
-              <tr className="border-y border-slate-200 bg-slate-50/80 text-left text-xs font-bold uppercase tracking-wider text-slate-600">
-                <th className="px-5 py-2.5">Provider</th>
-                <th className="px-3 py-2.5 text-right">Trainees</th>
-                <th className="px-3 py-2.5">Placement</th>
-                <th className="px-5 py-2.5 text-right">Rating</th>
+              <tr className="border-b border-slate-200 bg-slate-50/90 text-left text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
+                <th className="px-5 py-3">Training Provider</th>
+                <th className="px-3 py-3 text-right">Trainees</th>
+                <th className="px-4 py-3">Placement Rate</th>
+                <th className="px-5 py-3 text-right">Quality Rating</th>
               </tr>
             </thead>
-            <tbody>
-              {providerPerformance.map((p) => (
-                <tr key={p.provider} className="border-b border-slate-100 hover:bg-slate-50/60 transition-colors text-slate-900">
-                  <td className="px-5 py-2.5 font-bold">{p.provider}</td>
-                  <td className="px-3 py-2.5 text-right tabular-nums font-medium text-slate-700">
-                    {p.trainees.toLocaleString('en-IN')}
-                  </td>
-                  <td className="px-3 py-2.5">
+            <tbody className="divide-y divide-slate-100">
+              {providerPerformance.map((p, idx) => (
+                <tr key={p.provider} className="hover:bg-blue-50/40 transition-colors text-slate-900">
+                  <td className="px-5 py-3">
                     <div className="flex items-center gap-2">
-                      <Progress value={p.placementRate} className="w-20" />
-                      <span className="tabular-nums font-semibold text-slate-800">{p.placementRate}%</span>
+                      <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-slate-100 border border-slate-300 text-[10px] font-black text-slate-700">
+                        {idx + 1}
+                      </span>
+                      <span className="font-bold text-slate-950 text-sm">{p.provider}</span>
                     </div>
                   </td>
-                  <td className="px-5 py-2.5 text-right tabular-nums font-bold text-slate-950">{p.rating.toFixed(1)} / 5</td>
+                  <td className="px-3 py-3 text-right tabular-nums font-semibold text-slate-700">
+                    {p.trainees.toLocaleString('en-IN')}
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="h-2 w-20 overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
+                        <div
+                          className="h-full rounded-full bg-emerald-600"
+                          style={{ width: `${p.placementRate}%` }}
+                        />
+                      </div>
+                      <span className="tabular-nums font-extrabold text-slate-950 text-xs">{p.placementRate}%</span>
+                    </div>
+                  </td>
+                  <td className="px-5 py-3 text-right">
+                    <div className="inline-flex items-center gap-1 rounded-md bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs font-black text-amber-950 tabular-nums">
+                      <Star className="size-3 text-amber-600 fill-amber-500" />
+                      <span>{p.rating.toFixed(1)} / 5</span>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

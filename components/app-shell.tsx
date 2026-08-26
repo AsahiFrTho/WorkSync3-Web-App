@@ -26,7 +26,7 @@ const stakeholderPortals = [
     icon: LayoutDashboard,
     hint: 'State-wide macro metrics',
     roleBadge: 'Admin',
-    badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+    badgeColor: 'bg-blue-100/90 text-blue-900 border-blue-300 font-bold',
   },
   {
     label: 'Training Provider',
@@ -34,7 +34,7 @@ const stakeholderPortals = [
     icon: LineChart,
     hint: 'Skill gaps & performance',
     roleBadge: 'Provider',
-    badgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+    badgeColor: 'bg-indigo-100/90 text-indigo-900 border-indigo-300 font-bold',
   },
   {
     label: 'Employer Portal',
@@ -42,7 +42,7 @@ const stakeholderPortals = [
     icon: Building2,
     hint: 'Join & wage verification',
     roleBadge: 'Employer',
-    badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    badgeColor: 'bg-emerald-100/90 text-emerald-900 border-emerald-300 font-bold',
   },
   {
     label: 'Trainee Passport',
@@ -50,7 +50,7 @@ const stakeholderPortals = [
     icon: UserCheck,
     hint: 'Verifiable outcome record',
     roleBadge: 'Trainee',
-    badgeColor: 'bg-amber-100 text-amber-900 border-amber-200',
+    badgeColor: 'bg-amber-100/90 text-amber-950 border-amber-300 font-bold',
   },
 ]
 
@@ -62,7 +62,7 @@ const intelligenceTools = [
     icon: Sparkles,
     hint: 'Automated policy signals',
     roleBadge: 'Policy AI',
-    badgeColor: 'bg-purple-100 text-purple-800 border-purple-200',
+    badgeColor: 'bg-purple-100/90 text-purple-950 border-purple-300 font-bold',
   },
 ]
 
@@ -86,8 +86,8 @@ function getPersonaForPath(pathname: string): DemoPersona {
       roleCategory: 'Training Partner',
       shortRole: 'Provider',
       icon: GraduationCap,
-      badgeClass: 'bg-indigo-50 text-indigo-900 border-indigo-200',
-      accentColor: 'bg-indigo-100 text-indigo-800 border-indigo-300',
+      badgeClass: 'bg-indigo-50 text-indigo-950 border-indigo-200 font-bold',
+      accentColor: 'bg-indigo-100 text-indigo-900 border-indigo-300',
     }
   }
   if (pathname.startsWith('/employer')) {
@@ -98,20 +98,20 @@ function getPersonaForPath(pathname: string): DemoPersona {
       roleCategory: 'Industry Partner',
       shortRole: 'Employer',
       icon: Briefcase,
-      badgeClass: 'bg-emerald-50 text-emerald-900 border-emerald-200',
-      accentColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+      badgeClass: 'bg-emerald-50 text-emerald-950 border-emerald-200 font-bold',
+      accentColor: 'bg-emerald-100 text-emerald-900 border-emerald-300',
     }
   }
   if (pathname.startsWith('/trainee')) {
     return {
       roleTitle: 'Trainee Candidate',
       name: 'Rahul Pawar',
-      organization: 'ID: KP-0001 · Pune District',
+      organization: 'ID: KP-0001 • Pune District',
       roleCategory: 'Certified Candidate',
       shortRole: 'Trainee',
       icon: Users,
-      badgeClass: 'bg-amber-50 text-amber-900 border-amber-200',
-      accentColor: 'bg-amber-100 text-amber-900 border-amber-300',
+      badgeClass: 'bg-amber-50 text-amber-950 border-amber-200 font-bold',
+      accentColor: 'bg-amber-100 text-amber-950 border-amber-300',
     }
   }
   if (pathname.startsWith('/insights')) {
@@ -122,11 +122,11 @@ function getPersonaForPath(pathname: string): DemoPersona {
       roleCategory: 'Policy AI',
       shortRole: 'AI Signal',
       icon: Sparkles,
-      badgeClass: 'bg-purple-50 text-purple-900 border-purple-200',
-      accentColor: 'bg-purple-100 text-purple-800 border-purple-300',
+      badgeClass: 'bg-purple-50 text-purple-950 border-purple-200 font-bold',
+      accentColor: 'bg-purple-100 text-purple-950 border-purple-300',
     }
   }
-  // Government Administrator (/dashboard)
+  // Default: Government Administrator (/dashboard or /)
   return {
     roleTitle: 'Government / Administrator',
     name: 'Dr. Sanjay Patil',
@@ -134,31 +134,35 @@ function getPersonaForPath(pathname: string): DemoPersona {
     roleCategory: 'State Directorate',
     shortRole: 'Govt Admin',
     icon: ShieldCheck,
-    badgeClass: 'bg-blue-50 text-blue-900 border-blue-200',
-    accentColor: 'bg-blue-100 text-blue-800 border-blue-300',
+    badgeClass: 'bg-blue-50 text-blue-950 border-blue-200 font-bold',
+    accentColor: 'bg-blue-100 text-blue-900 border-blue-300',
   }
 }
 
 function Brand() {
   return (
-    <Link href="/" className="flex items-center gap-2.5 px-3 py-2 text-foreground group">
-      <div className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white border border-slate-200 shadow-xs">
+    <Link href="/dashboard" className="flex items-center gap-3 px-2 py-1 text-foreground group">
+      <div className="relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white border border-slate-200 shadow-xs transition-transform duration-200 group-hover:scale-105">
         <Image
           src="/favicon1.png"
           alt="KaushalPulse"
-          width={36}
-          height={36}
+          width={40}
+          height={40}
           className="size-full object-contain p-0.5"
           priority
         />
       </div>
       <div className="flex flex-col leading-tight min-w-0">
-        <span className="text-sm font-bold tracking-tight text-slate-950">
-          KAUSHAL
-        </span>
-        <span className="text-[10px] font-medium text-slate-600 truncate">
+        <div className="flex items-center gap-1.5">
+          <span className="text-base font-black tracking-tight text-slate-950 font-sans">
+            KAUSHAL<span className="text-blue-700">PULSE</span>
+          </span>
+        </div>
+        <span className="text-[10px] font-semibold text-slate-600 truncate">
           Skilling Outcomes & Intelligence
         </span>
+        {/* Subtle Institutional Tricolor Accent Line */}
+        <div className="mt-1 h-0.5 w-full rounded-full bg-gradient-to-r from-orange-500 via-slate-300 to-emerald-600 opacity-70" />
       </div>
     </Link>
   )
@@ -171,20 +175,22 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen w-full bg-slate-50 lg:h-screen lg:min-h-0 lg:overflow-hidden">
-      {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-64 shrink-0 flex-col justify-between border-r border-slate-200 bg-white lg:h-full lg:min-h-0 lg:overflow-y-auto">
-        <div className="flex flex-col gap-5 p-3">
+      {/* Desktop Sidebar (Government Command Navigation) */}
+      <aside className="hidden lg:flex w-64 shrink-0 flex-col justify-between border-r border-slate-200/90 bg-white lg:h-full lg:min-h-0 lg:overflow-y-auto shadow-2xs">
+        <div className="flex flex-col gap-6 p-4">
           <Brand />
 
           {/* Stakeholder Portals Group */}
           <div className="flex flex-col gap-1.5">
-            <p className="px-3 text-[11px] font-bold tracking-wider text-slate-500 uppercase">
-              Stakeholder Portals
-            </p>
+            <div className="flex items-center justify-between px-2.5">
+              <p className="text-[10px] font-extrabold tracking-widest text-slate-500 uppercase">
+                Stakeholder Portals
+              </p>
+              <span className="size-1.5 rounded-full bg-blue-600" aria-hidden="true" />
+            </div>
             <nav className="flex flex-col gap-1" aria-label="Stakeholder portals">
               {stakeholderPortals.map((item) => {
-                const active =
-                  item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
+                const active = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href))
                 const Icon = item.icon
                 return (
                   <Link
@@ -192,10 +198,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     href={item.href}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
-                      'group flex items-start justify-between rounded-lg px-2.5 py-2 text-sm transition-all',
+                      'group flex items-start justify-between rounded-lg px-3 py-2.5 text-xs transition-all duration-150',
                       active
-                        ? 'bg-blue-50 text-blue-950 font-semibold shadow-2xs'
-                        : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950',
+                        ? 'border-l-4 border-blue-700 bg-blue-50/90 text-blue-950 font-bold shadow-2xs'
+                        : 'border-l-4 border-transparent text-slate-700 hover:bg-slate-50 hover:text-slate-950 font-medium',
                     )}
                   >
                     <div className="flex items-start gap-2.5 min-w-0">
@@ -203,21 +209,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         <Icon
                           className={cn(
                             'mt-0.5 size-4 shrink-0 transition-colors',
-                            active ? 'text-blue-700' : 'text-slate-500 group-hover:text-slate-800',
+                            active ? 'text-blue-700 stroke-[2.5]' : 'text-slate-500 group-hover:text-slate-800',
                           )}
                           aria-hidden="true"
                         />
                       )}
                       <span className="flex flex-col leading-tight truncate">
-                        <span className="font-semibold text-xs tracking-tight">{item.label}</span>
-                        <span className="text-[10px] font-normal text-slate-500 truncate">
+                        <span className="font-bold text-xs tracking-tight">{item.label}</span>
+                        <span className="text-[10px] font-medium text-slate-500 truncate">
                           {item.hint}
                         </span>
                       </span>
                     </div>
                     <span
                       className={cn(
-                        'ml-1.5 mt-0.5 rounded border px-1.5 py-0.2 text-[9px] font-bold tracking-wide shrink-0',
+                        'ml-1.5 mt-0.5 rounded border px-1.5 py-0.2 text-[9px] tracking-wide shrink-0 font-bold',
                         item.badgeColor,
                       )}
                     >
@@ -231,9 +237,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
           {/* Intelligence & AI Signals Group */}
           <div className="flex flex-col gap-1.5">
-            <p className="px-3 text-[11px] font-bold tracking-wider text-slate-500 uppercase">
-              Intelligence & Signals
-            </p>
+            <div className="flex items-center justify-between px-2.5">
+              <p className="text-[10px] font-extrabold tracking-widest text-slate-500 uppercase">
+                Intelligence & Signals
+              </p>
+              <span className="size-1.5 rounded-full bg-purple-600" aria-hidden="true" />
+            </div>
             <nav className="flex flex-col gap-1" aria-label="Intelligence tools">
               {intelligenceTools.map((item) => {
                 const active = pathname.startsWith(item.href)
@@ -244,10 +253,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     href={item.href}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
-                      'group flex items-start justify-between rounded-lg px-2.5 py-2 text-sm transition-all',
+                      'group flex items-start justify-between rounded-lg px-3 py-2.5 text-xs transition-all duration-150',
                       active
-                        ? 'bg-purple-50 text-purple-950 font-semibold shadow-2xs'
-                        : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950',
+                        ? 'border-l-4 border-purple-700 bg-purple-50/90 text-purple-950 font-bold shadow-2xs'
+                        : 'border-l-4 border-transparent text-slate-700 hover:bg-slate-50 hover:text-slate-950 font-medium',
                     )}
                   >
                     <div className="flex items-start gap-2.5 min-w-0">
@@ -255,21 +264,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         <Icon
                           className={cn(
                             'mt-0.5 size-4 shrink-0 transition-colors',
-                            active ? 'text-purple-700' : 'text-slate-500 group-hover:text-slate-800',
+                            active ? 'text-purple-700 stroke-[2.5]' : 'text-slate-500 group-hover:text-slate-800',
                           )}
                           aria-hidden="true"
                         />
                       )}
                       <span className="flex flex-col leading-tight truncate">
-                        <span className="font-semibold text-xs tracking-tight">{item.label}</span>
-                        <span className="text-[10px] font-normal text-slate-500 truncate">
+                        <span className="font-bold text-xs tracking-tight">{item.label}</span>
+                        <span className="text-[10px] font-medium text-slate-500 truncate">
                           {item.hint}
                         </span>
                       </span>
                     </div>
                     <span
                       className={cn(
-                        'ml-1.5 mt-0.5 rounded border px-1.5 py-0.2 text-[9px] font-bold tracking-wide shrink-0',
+                        'ml-1.5 mt-0.5 rounded border px-1.5 py-0.2 text-[9px] tracking-wide shrink-0 font-bold',
                         item.badgeColor,
                       )}
                     >
@@ -282,27 +291,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        {/* Desktop Sidebar Footer */}
-        <div className="border-t border-slate-200 bg-slate-50/60 p-3 space-y-2">
-          <div className="rounded-lg border border-slate-200 bg-white p-2.5 shadow-2xs">
-            <div className="flex items-center justify-between gap-1">
-              <span className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">
-                Active Persona
+        {/* Desktop Sidebar Footer / Active Persona Command Badge */}
+        <div className="border-t border-slate-200 bg-slate-50/80 p-3.5 space-y-2.5">
+          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-2xs">
+            <div className="flex items-center justify-between gap-1 mb-1">
+              <span className="flex items-center gap-1.5 text-[10px] font-extrabold tracking-wider text-slate-500 uppercase">
+                <span className="size-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+                Active Session
               </span>
               <span className={cn('rounded px-1.5 py-0.2 text-[9px] font-bold border', activePersona.badgeClass)}>
                 {activePersona.shortRole}
               </span>
             </div>
 
-            <div className="mt-1.5 flex items-center gap-2">
-              <div className={cn('flex size-7 shrink-0 items-center justify-center rounded-md border', activePersona.accentColor)}>
-                {PersonaIcon && <PersonaIcon className="size-3.5" />}
+            <div className="flex items-center gap-2.5">
+              <div className={cn('flex size-8 shrink-0 items-center justify-center rounded-lg border shadow-2xs', activePersona.accentColor)}>
+                {PersonaIcon && <PersonaIcon className="size-4" />}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-bold text-slate-950">
+                <p className="truncate text-xs font-black text-slate-950">
                   {activePersona.name}
                 </p>
-                <p className="truncate text-[10px] font-medium text-slate-600">
+                <p className="truncate text-[10px] font-semibold text-slate-600">
                   {activePersona.organization}
                 </p>
               </div>
@@ -311,19 +321,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
           <Link
             href="/login"
-            className="flex items-center justify-between rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-bold text-blue-900 shadow-2xs transition-colors hover:bg-blue-100 hover:text-blue-950"
+            className="flex items-center justify-between rounded-lg border border-blue-300 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-900 shadow-2xs transition-colors hover:bg-blue-100 hover:text-blue-950"
           >
             <span className="flex items-center gap-1.5">
               <ArrowLeftRight className="size-3.5 text-blue-700" />
-              <span>Switch Role</span>
+              <span>Switch Demo Role</span>
             </span>
-            <span className="rounded bg-blue-200/80 px-1.5 py-0.2 text-[9px] font-bold text-blue-950">
+            <span className="rounded bg-blue-200/90 px-1.5 py-0.5 text-[9px] font-extrabold text-blue-950">
               Select
             </span>
           </Link>
 
-          <p className="px-1 text-[10px] leading-tight text-slate-500">
-            Prototype — Demonstration data only. Not connected to live records.
+          <p className="px-1 text-[10px] leading-tight text-slate-500 font-medium">
+            Evaluation Platform • MSSDS Skilling Intelligence
           </p>
         </div>
       </aside>
@@ -346,7 +356,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {/* Active Persona Strip (Mobile) */}
           <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50 px-4 py-1.5 text-xs">
             <div className="flex items-center gap-1.5 min-w-0">
-              <PersonaIcon className="size-3.5 text-blue-700 shrink-0" />
+              {PersonaIcon && <PersonaIcon className="size-3.5 text-blue-700 shrink-0" />}
               <span className="truncate text-slate-700 font-medium">
                 Persona: <strong className="text-slate-950">{activePersona.name}</strong>
               </span>
@@ -362,8 +372,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             aria-label="Primary mobile"
           >
             {[...stakeholderPortals, ...intelligenceTools].map((item) => {
-              const active =
-                item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
+              const active = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href))
               const Icon = item.icon
               return (
                 <Link
@@ -371,8 +380,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   href={item.href}
                   aria-current={active ? 'page' : undefined}
                   className={cn(
-                    'flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors',
-                    active ? 'bg-blue-100 text-blue-900' : 'text-slate-600 hover:bg-slate-100',
+                    'flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1 text-xs font-bold transition-colors',
+                    active ? 'bg-blue-700 text-white' : 'text-slate-700 hover:bg-slate-100',
                   )}
                 >
                   {Icon && <Icon className="size-3.5" aria-hidden="true" />}
@@ -383,30 +392,32 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </nav>
         </header>
 
-        {/* Global Desktop Persona Header Strip with safe wrapping & truncation */}
-        <div className="hidden lg:flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-100/70 px-4 xl:px-6 py-2 text-xs">
-          <div className="flex min-w-0 flex-1 items-center gap-2 xl:gap-3">
-            <div className="flex shrink-0 items-center gap-1.5 font-medium text-slate-600">
-              <ShieldCheck className="size-4 text-blue-700" />
+        {/* Global Desktop Persona Header Strip (Executive Command Bar) */}
+        <div className="hidden lg:flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-slate-200/90 bg-white px-5 xl:px-8 py-2.5 text-xs shadow-2xs">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <div className="flex shrink-0 items-center gap-2 font-medium text-slate-700">
+              <span className="flex size-6 items-center justify-center rounded-md bg-blue-100 text-blue-800">
+                <ShieldCheck className="size-3.5" />
+              </span>
               <span>
-                Active Stakeholder: <strong className="text-slate-950 font-bold">{activePersona.roleTitle}</strong>
+                Active Stakeholder: <strong className="text-slate-950 font-extrabold">{activePersona.roleTitle}</strong>
               </span>
             </div>
-            <span className="hidden xl:inline text-slate-300">|</span>
+            <span className="text-slate-300">|</span>
             <span className="truncate text-slate-700 font-semibold">
-              {activePersona.name} <span className="hidden 2xl:inline text-slate-500 font-normal">({activePersona.organization})</span>
+              {activePersona.name} <span className="text-slate-500 font-normal">({activePersona.organization})</span>
             </span>
           </div>
 
-          <div className="flex shrink-0 items-center gap-2">
-            <span className={cn('rounded px-2 py-0.5 text-[10px] font-bold border', activePersona.badgeClass)}>
+          <div className="flex shrink-0 items-center gap-2.5">
+            <span className={cn('rounded px-2 py-0.5 text-[10px] font-extrabold border', activePersona.badgeClass)}>
               {activePersona.roleCategory}
             </span>
             <Link
               href="/login"
-              className="inline-flex items-center gap-1 font-bold text-blue-700 hover:text-blue-900 hover:underline text-xs ml-1"
+              className="inline-flex items-center gap-1.5 font-bold text-blue-700 hover:text-blue-900 bg-blue-50 border border-blue-200/80 px-2.5 py-1 rounded-md text-xs transition-colors hover:bg-blue-100"
             >
-              <ArrowLeftRight className="size-3.5" />
+              <ArrowLeftRight className="size-3 text-blue-700" />
               <span>Switch Role</span>
             </Link>
           </div>
