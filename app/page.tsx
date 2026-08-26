@@ -1,4 +1,5 @@
-import { Users, Briefcase, Repeat, IndianRupee } from 'lucide-react'
+import Link from 'next/link'
+import { Users, Briefcase, Repeat, IndianRupee, ArrowLeftRight, ShieldCheck } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { PageHeader } from '@/components/page-header'
 import { StatCard } from '@/components/stat-card'
@@ -27,6 +28,22 @@ export default function DashboardPage() {
       />
 
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+        {/* Active Demo Role Banner */}
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50/60 px-4 py-2.5 text-xs text-blue-900 dark:border-blue-900/40 dark:bg-blue-950/20 dark:text-blue-200">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="size-4 text-blue-600 dark:text-blue-400" />
+            <span>
+              <strong>Active Demo Persona:</strong> Dr. Sanjay Patil (Director of Policy & Analytics, MSSDS)
+            </span>
+          </div>
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-1 font-semibold text-blue-700 underline-offset-4 hover:underline dark:text-blue-300"
+          >
+            <ArrowLeftRight className="size-3.5" />
+            <span>Switch Demo Role</span>
+          </Link>
+        </div>
         {/* KPIs */}
         <section aria-label="Key metrics" className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard
