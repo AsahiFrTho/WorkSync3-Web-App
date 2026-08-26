@@ -8,31 +8,31 @@ import {
 } from '@/lib/mock-data'
 
 const toneDot: Record<string, string> = {
-  success: 'bg-success',
-  warning: 'bg-warning',
-  destructive: 'bg-destructive',
-  neutral: 'bg-muted-foreground',
+  success: 'bg-emerald-600',
+  warning: 'bg-amber-600',
+  destructive: 'bg-rose-600',
+  neutral: 'bg-slate-400',
 }
 
 export function FollowUpStatus() {
   const total = followUpStatus.reduce((s, d) => s + d.value, 0)
   return (
-    <Card>
+    <Card className="border border-slate-200 bg-white shadow-xs">
       <CardHeader>
-        <CardTitle>Follow-up status</CardTitle>
-        <CardDescription>Outcome verification across the cohort</CardDescription>
+        <CardTitle className="text-base font-bold text-slate-950">Follow-up Status</CardTitle>
+        <CardDescription className="text-xs text-slate-600">Outcome verification across the active cohort</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {followUpStatus.map((f) => (
           <div key={f.label} className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between text-sm">
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2 font-medium text-slate-900">
                 <span className={`size-2.5 rounded-full ${toneDot[f.tone]}`} aria-hidden="true" />
                 {f.label}
               </span>
-              <span className="tabular-nums text-muted-foreground">
+              <span className="tabular-nums font-bold text-slate-950">
                 {f.value.toLocaleString('en-IN')}
-                <span className="ml-2 text-xs">{Math.round((f.value / total) * 100)}%</span>
+                <span className="ml-2 text-xs font-semibold text-slate-500">{Math.round((f.value / total) * 100)}%</span>
               </span>
             </div>
             <Progress
@@ -49,21 +49,21 @@ export function FollowUpStatus() {
 export function SkillGapIndicators() {
   const top = skillGaps.filter((s) => s.gap > 0).slice(0, 4)
   return (
-    <Card>
+    <Card className="border border-slate-200 bg-white shadow-xs">
       <CardHeader>
-        <CardTitle>Skill-gap indicators</CardTitle>
-        <CardDescription>High demand vs. low training coverage</CardDescription>
+        <CardTitle className="text-base font-bold text-slate-950">Skill-Gap Indicators</CardTitle>
+        <CardDescription className="text-xs text-slate-600">High employer demand vs. low training coverage</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {top.map((s) => (
           <div
             key={s.skill}
-            className="flex items-center justify-between gap-3 rounded-lg border border-border bg-muted/40 px-3 py-2.5"
+            className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50/80 px-3.5 py-2.5"
           >
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium">{s.skill}</p>
-              <p className="text-xs text-muted-foreground">
-                Demand {s.demand} · Coverage {s.coverage}
+              <p className="truncate text-sm font-bold text-slate-950">{s.skill}</p>
+              <p className="text-xs font-medium text-slate-600">
+                Demand {s.demand} • Coverage {s.coverage}
               </p>
             </div>
             <Badge variant={s.demand === 'High' ? 'destructive' : 'warning'}>
@@ -79,21 +79,21 @@ export function SkillGapIndicators() {
 export function NonPlacementReasonsCard() {
   const max = Math.max(...nonPlacementReasons.map((r) => r.value))
   return (
-    <Card>
+    <Card className="border border-slate-200 bg-white shadow-xs">
       <CardHeader>
-        <CardTitle>Non-placement reasons</CardTitle>
-        <CardDescription>Why certified trainees remain unplaced</CardDescription>
+        <CardTitle className="text-base font-bold text-slate-950">Non-Placement Reasons</CardTitle>
+        <CardDescription className="text-xs text-slate-600">Why certified trainees remain unplaced</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {nonPlacementReasons.map((r) => (
           <div key={r.reason} className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between text-sm">
-              <span>{r.reason}</span>
-              <span className="tabular-nums text-muted-foreground">{r.value}%</span>
+              <span className="font-medium text-slate-800">{r.reason}</span>
+              <span className="tabular-nums font-bold text-slate-950">{r.value}%</span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
               <div
-                className="h-full rounded-full bg-chart-5"
+                className="h-full rounded-full bg-rose-600"
                 style={{ width: `${(r.value / max) * 100}%` }}
               />
             </div>

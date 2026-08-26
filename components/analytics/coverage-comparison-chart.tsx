@@ -21,50 +21,52 @@ export function CoverageComparisonChart({ courseFilter }: { courseFilter?: strin
   const view = data.length ? data : courseToSkillComparison
 
   return (
-    <Card>
+    <Card className="border border-slate-200 bg-white shadow-xs">
       <CardHeader>
-        <CardTitle>Course-to-skill comparison</CardTitle>
-        <CardDescription>Training coverage vs. employer demand by course</CardDescription>
+        <CardTitle className="text-base font-bold text-slate-950">Course-to-Skill Comparison</CardTitle>
+        <CardDescription className="text-xs text-slate-600">Training coverage vs. employer demand index by course</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={view} margin={{ left: 0, right: 8, top: 4, bottom: 4 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
               <XAxis
                 dataKey="course"
                 tickLine={false}
                 axisLine={false}
                 interval={0}
-                tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
+                tick={{ fontSize: 11, fill: '#475569', fontWeight: 600 }}
               />
               <YAxis
                 tickLine={false}
                 axisLine={false}
-                width={32}
-                tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
+                width={36}
+                tick={{ fontSize: 11, fill: '#475569', fontWeight: 600 }}
               />
               <Tooltip
-                cursor={{ fill: 'var(--muted)' }}
+                cursor={{ fill: '#f1f5f9' }}
                 contentStyle={{
                   borderRadius: 10,
-                  border: '1px solid var(--border)',
-                  background: 'var(--popover)',
-                  color: 'var(--popover-foreground)',
+                  border: '1px solid #cbd5e1',
+                  background: '#ffffff',
+                  color: '#0f172a',
                   fontSize: 12,
+                  fontWeight: 600,
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                 }}
               />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
+              <Legend wrapperStyle={{ fontSize: 12, fontWeight: 600, color: '#334155', paddingTop: 8 }} />
               <Bar
                 dataKey="trainingCoverage"
-                name="Training coverage"
-                fill="var(--chart-2)"
+                name="Training Coverage"
+                fill="#4f46e5"
                 radius={[4, 4, 0, 0]}
               />
               <Bar
                 dataKey="employerDemand"
-                name="Employer demand"
-                fill="var(--chart-1)"
+                name="Employer Demand"
+                fill="#1d4ed8"
                 radius={[4, 4, 0, 0]}
               />
             </BarChart>

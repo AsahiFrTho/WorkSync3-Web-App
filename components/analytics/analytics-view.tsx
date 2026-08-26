@@ -24,11 +24,11 @@ function FilterSelect({
 }) {
   return (
     <label className="flex flex-col gap-1 text-xs">
-      <span className="font-medium text-muted-foreground">{label}</span>
+      <span className="font-bold uppercase tracking-wider text-slate-600">{label}</span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-9 min-w-44 rounded-lg border border-border bg-background px-3 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40"
+        className="h-9 min-w-44 rounded-lg border border-slate-300 bg-white px-3 text-xs font-semibold text-slate-900 outline-none focus:border-blue-700 focus:ring-2 focus:ring-blue-500/20"
       >
         {options.map((o) => (
           <option key={o} value={o}>
@@ -47,10 +47,10 @@ function TrainingCoverageCard({ courseFilter }: { courseFilter: string }) {
       : coursePerformance.filter((c) => c.course === courseFilter)
   const view = rows.length ? rows : coursePerformance
   return (
-    <Card>
+    <Card className="border border-slate-200 bg-white shadow-xs">
       <CardHeader>
-        <CardTitle>Training coverage</CardTitle>
-        <CardDescription>Trainee volume by course as a coverage proxy</CardDescription>
+        <CardTitle className="text-base font-bold text-slate-950">Training Coverage</CardTitle>
+        <CardDescription className="text-xs text-slate-600">Trainee volume by course as a coverage proxy</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {view.map((c) => {
@@ -58,15 +58,15 @@ function TrainingCoverageCard({ courseFilter }: { courseFilter: string }) {
           return (
             <div key={c.course} className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between text-sm">
-                <span className="flex items-center gap-2">
+                <span className="flex items-center gap-2 font-bold text-slate-950">
                   {c.course}
                   <Badge variant={c.demand === 'High' ? 'success' : 'neutral'}>{c.demand}</Badge>
                 </span>
-                <span className="tabular-nums text-muted-foreground">
+                <span className="tabular-nums font-bold text-slate-800">
                   {c.trainees.toLocaleString('en-IN')}
                 </span>
               </div>
-              <Progress value={(c.trainees / max) * 100} indicatorClassName="bg-chart-2" />
+              <Progress value={(c.trainees / max) * 100} indicatorClassName="bg-blue-600" />
             </div>
           )
         })}
@@ -82,11 +82,11 @@ export function AnalyticsView() {
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
       {/* Filters */}
-      <Card>
+      <Card className="border border-slate-200 bg-white shadow-xs">
         <CardContent className="flex flex-wrap items-end gap-4 p-4">
-          <div className="flex items-center gap-2 text-sm font-medium">
-            <Filter className="size-4 text-muted-foreground" aria-hidden="true" />
-            Filters
+          <div className="flex items-center gap-2 text-sm font-bold text-slate-950">
+            <Filter className="size-4 text-blue-700" aria-hidden="true" />
+            <span>Diagnostic Filters</span>
           </div>
           <FilterSelect
             label="District"
@@ -100,10 +100,10 @@ export function AnalyticsView() {
             options={courses}
             onChange={setCourse}
           />
-          <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
-            <span>Showing:</span>
-            <Badge variant="neutral">{district}</Badge>
-            <Badge variant="neutral">{course}</Badge>
+          <div className="ml-auto flex items-center gap-2 text-xs font-semibold text-slate-600">
+            <span>Filtering By:</span>
+            <Badge variant="default">{district}</Badge>
+            <Badge variant="default">{course}</Badge>
           </div>
         </CardContent>
       </Card>

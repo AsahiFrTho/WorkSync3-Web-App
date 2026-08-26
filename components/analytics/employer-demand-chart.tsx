@@ -15,10 +15,10 @@ import { employerDemandedSkills } from '@/lib/mock-data'
 
 export function EmployerDemandChart() {
   return (
-    <Card>
+    <Card className="border border-slate-200 bg-white shadow-xs">
       <CardHeader>
-        <CardTitle>Employer-demanded skills</CardTitle>
-        <CardDescription>Open positions reported by employers (mock)</CardDescription>
+        <CardTitle className="text-base font-bold text-slate-950">Employer-Demanded Skills</CardTitle>
+        <CardDescription className="text-xs text-slate-600">Open verified positions reported across employer network</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-72 w-full">
@@ -28,12 +28,12 @@ export function EmployerDemandChart() {
               layout="vertical"
               margin={{ left: 8, right: 24, top: 4, bottom: 4 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={false} />
               <XAxis
                 type="number"
                 tickLine={false}
                 axisLine={false}
-                tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
+                tick={{ fontSize: 11, fill: '#475569', fontWeight: 600 }}
               />
               <YAxis
                 type="category"
@@ -41,22 +41,23 @@ export function EmployerDemandChart() {
                 width={120}
                 tickLine={false}
                 axisLine={false}
-                tick={{ fontSize: 11, fill: 'var(--foreground)' }}
+                tick={{ fontSize: 11, fill: '#0f172a', fontWeight: 600 }}
               />
               <Tooltip
-                cursor={{ fill: 'var(--muted)' }}
+                cursor={{ fill: '#f1f5f9' }}
                 contentStyle={{
                   borderRadius: 10,
-                  border: '1px solid var(--border)',
-                  background: 'var(--popover)',
-                  color: 'var(--popover-foreground)',
+                  border: '1px solid #cbd5e1',
+                  background: '#ffffff',
+                  color: '#0f172a',
                   fontSize: 12,
+                  fontWeight: 600,
                 }}
                 formatter={(v) => [typeof v === 'number' ? v.toLocaleString('en-IN') : String(v ?? ''), 'Openings']}
               />
               <Bar dataKey="openings" radius={[0, 6, 6, 0]} barSize={18}>
                 {employerDemandedSkills.map((entry, i) => (
-                  <Cell key={entry.skill} fill={i < 4 ? 'var(--chart-1)' : 'var(--chart-2)'} />
+                  <Cell key={entry.skill} fill={i < 4 ? '#1d4ed8' : '#4f46e5'} />
                 ))}
               </Bar>
             </BarChart>

@@ -33,8 +33,6 @@ interface IEmploymentRecordItem {
   verificationStatus: 'pending' | 'verified' | 'disputed' | 'flagged'
   verificationMetadata?: {
     verifiedAt?: string
-
-
     verifiedBy?: string
     disputeReason?: string
     remarks?: string
@@ -111,7 +109,6 @@ export default function EmployerPage() {
           type: 'success',
           message: 'Employment successfully confirmed & verified!',
         })
-        // Update local state immediately with the updated record
         setRecords((prev) =>
           prev.map((r) => (r._id === id ? { ...r, ...data.employmentRecord } : r))
         )
@@ -153,7 +150,6 @@ export default function EmployerPage() {
           type: 'success',
           message: 'Record marked as disputed (Trainee did not join).',
         })
-        // Update local state immediately with the updated record
         setRecords((prev) =>
           prev.map((r) => (r._id === id ? { ...r, ...data.employmentRecord } : r))
         )
@@ -209,42 +205,42 @@ export default function EmployerPage() {
           />
         </section>
 
-        <Card>
+        <Card className="border border-slate-200 bg-white shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Verification queue</CardTitle>
-              <CardDescription>Confirm or dispute employment against live MongoDB records</CardDescription>
+              <CardTitle className="text-base font-bold text-slate-950">Verification Queue</CardTitle>
+              <CardDescription className="text-xs text-slate-600">Confirm or dispute employment against live database records</CardDescription>
             </div>
             <Button
               variant="outline"
               size="sm"
               onClick={fetchRecords}
               disabled={loading}
-              className="text-xs"
+              className="text-xs font-bold border-slate-300 bg-white hover:bg-slate-100"
             >
               {loading ? (
                 <Loader2 className="mr-1.5 size-3 animate-spin" />
               ) : (
-                <Sparkles className="mr-1.5 size-3" />
+                <Sparkles className="mr-1.5 size-3 text-blue-700" />
               )}
               Refresh Queue
             </Button>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {loading && records.length === 0 ? (
-              <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
-                <Loader2 className="mr-2 size-5 animate-spin text-primary" />
+              <div className="flex items-center justify-center py-12 text-sm font-semibold text-slate-600">
+                <Loader2 className="mr-2 size-5 animate-spin text-blue-700" />
                 Loading employment verification records from database...
               </div>
             ) : error && records.length === 0 ? (
-              <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
-                <p className="font-semibold">Error connecting to database</p>
-                <p>{error}</p>
+              <div className="rounded-xl border border-rose-200 bg-rose-50/80 p-4 text-sm text-rose-900">
+                <p className="font-bold">Error connecting to database</p>
+                <p className="text-xs font-medium text-rose-800">{error}</p>
               </div>
             ) : records.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-sm font-medium">No employment records found</p>
-                <p className="text-xs text-muted-foreground">Seed records to begin testing the verification flow.</p>
+                <p className="text-sm font-bold text-slate-950">No employment records found</p>
+                <p className="text-xs font-medium text-slate-600">Seed records to begin testing the verification flow.</p>
               </div>
             ) : (
               records.map((e) => {
@@ -265,11 +261,11 @@ export default function EmployerPage() {
                 return (
                   <div
                     key={e._id}
-                    className="flex flex-col gap-3 rounded-lg border border-border p-4 transition-colors hover:border-border/80 sm:flex-row sm:items-center sm:justify-between"
+                    className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-slate-300 shadow-2xs sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div className="flex min-w-0 flex-col gap-1.5">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-sm font-semibold">{traineeName}</span>
+                        <span className="text-sm font-bold text-slate-950">{traineeName}</span>
                         <Badge variant={meta.variant}>
                           <Icon className="size-3" aria-hidden="true" /> {meta.label}
                         </Badge>
@@ -277,27 +273,35 @@ export default function EmployerPage() {
                           {relevance.label}
                         </Badge>
                       </div>
-                      <p className="font-mono text-xs text-muted-foreground">{e.traineeId} · {e.employerName}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {e.jobRole} · {courseName} · Joined {formattedDate} · {inr(e.monthlyWage)}/mo
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        <span className="font-mono font-bold text-blue-900 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                          {e.traineeId}
+                        </span>
+                        <span className="font-bold text-slate-800">
+                          {e.employerName}
+                        </span>
+                      </div>
+                      <p className="text-xs font-medium text-slate-700">
+                        {e.jobRole} · {courseName} · Joined {formattedDate} · <span className="font-bold text-slate-950">{inr(e.monthlyWage)}/mo</span>
                       </p>
                       {e.verificationStatus === 'disputed' && e.verificationMetadata?.disputeReason && (
-                        <p className="text-xs font-medium text-destructive">
+                        <div className="rounded-md border border-rose-200 bg-rose-50/80 p-2 text-xs font-semibold text-rose-900">
                           Dispute Reason: {e.verificationMetadata.disputeReason}
-                        </p>
+                        </div>
                       )}
                       {e.verificationStatus === 'verified' && e.verificationMetadata?.verifiedBy && (
-                        <p className="text-xs font-medium text-success">
+                        <div className="rounded-md border border-emerald-200 bg-emerald-50/80 p-2 text-xs font-semibold text-emerald-900">
                           Verified by {e.verificationMetadata.verifiedBy}
                           {e.verificationMetadata.verifiedAt && (
                             <span> on {new Date(e.verificationMetadata.verifiedAt).toLocaleDateString('en-IN')}</span>
                           )}
-                        </p>
+                        </div>
                       )}
                       {itemFeedback && (
                         <div
-                          className={`mt-1 flex items-center gap-1.5 text-xs font-medium ${itemFeedback.type === 'success' ? 'text-success' : 'text-destructive'
-                            }`}
+                          className={`mt-1 flex items-center gap-1.5 text-xs font-bold ${
+                            itemFeedback.type === 'success' ? 'text-emerald-700' : 'text-rose-700'
+                          }`}
                         >
                           {itemFeedback.type === 'success' ? (
                             <CheckCircle2 className="size-3.5" />
@@ -311,12 +315,12 @@ export default function EmployerPage() {
 
                     <div className="flex shrink-0 items-center gap-2">
                       {e.verificationStatus === 'verified' ? (
-                        <Button variant="outline" size="sm" disabled className="text-success border-success/30">
-                          <CheckCircle2 className="mr-1.5 size-3.5" /> Confirmed
+                        <Button variant="outline" size="sm" disabled className="text-emerald-900 border-emerald-300 bg-emerald-50 font-bold text-xs">
+                          <CheckCircle2 className="mr-1.5 size-3.5 text-emerald-700" /> Confirmed
                         </Button>
                       ) : e.verificationStatus === 'disputed' ? (
-                        <Button variant="outline" size="sm" disabled className="text-destructive border-destructive/30">
-                          <XCircle className="mr-1.5 size-3.5" /> Disputed
+                        <Button variant="outline" size="sm" disabled className="text-rose-900 border-rose-300 bg-rose-50 font-bold text-xs">
+                          <XCircle className="mr-1.5 size-3.5 text-rose-700" /> Disputed
                         </Button>
                       ) : (
                         <>
@@ -325,6 +329,7 @@ export default function EmployerPage() {
                             size="sm"
                             onClick={() => handleDispute(e._id)}
                             disabled={isItemProcessing}
+                            className="border-rose-300 bg-white text-rose-800 hover:bg-rose-50 font-bold text-xs"
                           >
                             {isItemProcessing ? <Loader2 className="size-3.5 animate-spin" /> : 'Dispute'}
                           </Button>
@@ -332,13 +337,14 @@ export default function EmployerPage() {
                             size="sm"
                             onClick={() => handleConfirm(e._id)}
                             disabled={isItemProcessing}
+                            className="bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs shadow-xs"
                           >
                             {isItemProcessing ? (
                               <Loader2 className="mr-1.5 size-3.5 animate-spin" />
                             ) : (
                               <BadgeCheck className="mr-1.5 size-3.5" />
                             )}
-                            Confirm employment
+                            Confirm Employment
                           </Button>
                         </>
                       )}
@@ -353,4 +359,3 @@ export default function EmployerPage() {
     </AppShell>
   )
 }
-
