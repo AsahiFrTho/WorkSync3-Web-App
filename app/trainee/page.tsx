@@ -8,6 +8,7 @@ import Trainee, { type ITrainee } from '@/models/trainee'
 import EmploymentRecord, { type IEmploymentRecord } from '@/models/employment-record'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
+import { CareerIntelligenceCard } from '@/components/trainee/career-intelligence-card'
 
 const inr = (n: number) =>
   new Intl.NumberFormat('en-IN', {
@@ -495,6 +496,9 @@ export default async function TraineePage({
                 )}
               </CardContent>
             </Card>
+
+            {/* AI Career Intelligence Section */}
+            <CareerIntelligenceCard traineeId={trainee.traineeId} />
           </div>
 
           {/* Right Column: Credential + Skills + Employer */}
