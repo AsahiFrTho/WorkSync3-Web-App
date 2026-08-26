@@ -61,7 +61,7 @@ const roles: RoleOption[] = [
     title: 'Government / Administrator',
     marathiTitle: 'शासकीय / प्रशासक',
     category: 'State & District Directorate',
-    targetHref: '/',
+    targetHref: '/dashboard',
     icon: Building2,
     persona: {
       name: 'Dr. Sanjay Patil',

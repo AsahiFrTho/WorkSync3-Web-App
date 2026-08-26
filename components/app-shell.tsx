@@ -22,7 +22,7 @@ import { cn } from '@/lib/utils'
 const stakeholderPortals = [
   {
     label: 'Government / Admin',
-    href: '/',
+    href: '/dashboard',
     icon: LayoutDashboard,
     hint: 'State-wide macro metrics',
     roleBadge: 'Admin',
@@ -126,7 +126,7 @@ function getPersonaForPath(pathname: string): DemoPersona {
       accentColor: 'bg-purple-100 text-purple-800 border-purple-300',
     }
   }
-  // Default: Government Administrator (/)
+  // Government Administrator (/dashboard)
   return {
     roleTitle: 'Government / Administrator',
     name: 'Dr. Sanjay Patil',
@@ -188,7 +188,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 const Icon = item.icon
                 return (
                   <Link
-                    key={item.href}
+                    key={item.label}
                     href={item.href}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
@@ -199,13 +199,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     )}
                   >
                     <div className="flex items-start gap-2.5 min-w-0">
-                      <Icon
-                        className={cn(
-                          'mt-0.5 size-4 shrink-0 transition-colors',
-                          active ? 'text-blue-700' : 'text-slate-500 group-hover:text-slate-800',
-                        )}
-                        aria-hidden="true"
-                      />
+                      {Icon && (
+                        <Icon
+                          className={cn(
+                            'mt-0.5 size-4 shrink-0 transition-colors',
+                            active ? 'text-blue-700' : 'text-slate-500 group-hover:text-slate-800',
+                          )}
+                          aria-hidden="true"
+                        />
+                      )}
                       <span className="flex flex-col leading-tight truncate">
                         <span className="font-semibold text-xs tracking-tight">{item.label}</span>
                         <span className="text-[10px] font-normal text-slate-500 truncate">
@@ -238,7 +240,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 const Icon = item.icon
                 return (
                   <Link
-                    key={item.href}
+                    key={item.label}
                     href={item.href}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
@@ -249,13 +251,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     )}
                   >
                     <div className="flex items-start gap-2.5 min-w-0">
-                      <Icon
-                        className={cn(
-                          'mt-0.5 size-4 shrink-0 transition-colors',
-                          active ? 'text-purple-700' : 'text-slate-500 group-hover:text-slate-800',
-                        )}
-                        aria-hidden="true"
-                      />
+                      {Icon && (
+                        <Icon
+                          className={cn(
+                            'mt-0.5 size-4 shrink-0 transition-colors',
+                            active ? 'text-purple-700' : 'text-slate-500 group-hover:text-slate-800',
+                          )}
+                          aria-hidden="true"
+                        />
+                      )}
                       <span className="flex flex-col leading-tight truncate">
                         <span className="font-semibold text-xs tracking-tight">{item.label}</span>
                         <span className="text-[10px] font-normal text-slate-500 truncate">
@@ -292,7 +296,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
             <div className="mt-1.5 flex items-center gap-2">
               <div className={cn('flex size-7 shrink-0 items-center justify-center rounded-md border', activePersona.accentColor)}>
-                <PersonaIcon className="size-3.5" />
+                {PersonaIcon && <PersonaIcon className="size-3.5" />}
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-xs font-bold text-slate-950">
@@ -363,7 +367,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               const Icon = item.icon
               return (
                 <Link
-                  key={item.href}
+                  key={item.label}
                   href={item.href}
                   aria-current={active ? 'page' : undefined}
                   className={cn(
@@ -371,7 +375,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     active ? 'bg-blue-100 text-blue-900' : 'text-slate-600 hover:bg-slate-100',
                   )}
                 >
-                  <Icon className="size-3.5" aria-hidden="true" />
+                  {Icon && <Icon className="size-3.5" aria-hidden="true" />}
                   {item.label}
                 </Link>
               )
