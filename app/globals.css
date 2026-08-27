@@ -543,8 +543,11 @@
 .dark .border-amber-200\/90,
 .dark .border-amber-300,
 .dark .border-rose-200,
-.dark .border-rose-300,
-.dark .divide-slate-100 > :not(:hidden) ~ :not(:hidden) {
+.dark .border-rose-300 {
+  border-color: var(--border) !important;
+}
+
+.dark .divide-slate-100 > * {
   border-color: var(--border) !important;
 }
 .light .border-slate-200,
@@ -572,8 +575,11 @@
 .light .border-amber-200\/90,
 .light .border-amber-300,
 .light .border-rose-200,
-.light .border-rose-300,
-.light .divide-slate-100 > :not(:hidden) ~ :not(:hidden) {
+.light .border-rose-300 {
+  border-color: var(--border) !important;
+}
+
+.light .divide-slate-100 > * {
   border-color: var(--border) !important;
 }
 .dark .border-blue-600,
