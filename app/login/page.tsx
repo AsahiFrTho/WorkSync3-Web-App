@@ -369,10 +369,10 @@ export default function LoginPage() {
                   'group relative flex flex-col justify-between rounded-xl border bg-white p-5 text-left transition-all duration-200 cursor-pointer shadow-xs',
                   isSelected
                     ? cn(
-                        'ring-2 shadow-md bg-blue-50/30',
-                        role.accentColor.activeBorder,
-                        role.accentColor.activeRing,
-                      )
+                      'ring-2 shadow-md bg-blue-50/30',
+                      role.accentColor.activeBorder,
+                      role.accentColor.activeRing,
+                    )
                     : 'border-slate-200 hover:border-slate-400 hover:shadow-sm',
                 )}
               >

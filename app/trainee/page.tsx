@@ -1,4 +1,25 @@
-import { Check, Clock, MapPin, GraduationCap, Building2, BadgeCheck, AlertTriangle, Award, ShieldCheck, Calendar, TrendingUp, CheckCircle2, XCircle } from 'lucide-react'
+import {
+  Check,
+  Clock,
+  MapPin,
+  GraduationCap,
+  Building2,
+  BadgeCheck,
+  AlertTriangle,
+  Award,
+  ShieldCheck,
+  Calendar,
+  TrendingUp,
+  CheckCircle2,
+  XCircle,
+  Briefcase,
+  Layers,
+  Sparkles,
+  FileCheck2,
+  ArrowRight,
+  UserCheck,
+  FileBadge,
+} from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { PageHeader } from '@/components/page-header'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -17,25 +38,37 @@ const inr = (n: number) =>
     maximumFractionDigits: 0,
   }).format(n)
 
-const relevanceLabels: Record<string, { label: string; variant: 'success' | 'warning' | 'neutral' }> = {
-  directly_related: { label: 'Direct Trade Alignment', variant: 'success' },
-  partially_related: { label: 'Partially Related', variant: 'warning' },
-  unrelated: { label: 'Not Related', variant: 'neutral' },
+const relevanceLabels: Record<string, { label: string; variant: 'success' | 'warning' | 'neutral'; description: string }> = {
+  directly_related: {
+    label: 'Direct Trade Alignment',
+    variant: 'success',
+    description: 'Current job role matches certified trade curriculum.',
+  },
+  partially_related: {
+    label: 'Partially Related',
+    variant: 'warning',
+    description: 'Job role utilizes adjacent technical & vocational skills.',
+  },
+  unrelated: {
+    label: 'Unrelated Sector',
+    variant: 'neutral',
+    description: 'Job role operates outside certified trade specialization.',
+  },
 }
 
 const milestoneLabels: Record<string, string> = {
-  "30_day": "30-Day Retention",
-  "90_day": "90-Day Retention",
-  "180_day": "180-Day (6-Mo) Retention",
-  "365_day": "365-Day (1-Yr) Retention",
+  '30_day': '30-Day Retention Milestone',
+  '90_day': '90-Day Retention Milestone',
+  '180_day': '180-Day (6-Mo) Retention Audit',
+  '365_day': '365-Day (1-Yr) Career Milestone',
 }
 
 const methodLabels: Record<string, string> = {
-  employer_portal: "Employer Portal Verification",
-  hr_call: "HR Telephonic Verification",
-  offer_letter: "Offer Letter Submission",
-  payslip: "Monthly Payslip Audit",
-  pf_uan: "EPFO / UAN Confirmation",
+  employer_portal: 'Employer Direct Verification Portal',
+  hr_call: 'HR Telephonic Verification Cell',
+  offer_letter: 'Offer Letter & Joining Audit',
+  payslip: 'Monthly Payslip Verification',
+  pf_uan: 'EPFO / UAN Confirmation',
 }
 
 export default async function TraineePage({
@@ -43,52 +76,52 @@ export default async function TraineePage({
 }: {
   searchParams?: Promise<{ id?: string }>
 }) {
-  const resolvedParams = searchParams ? await searchParams : {};
-  const currentId = (resolvedParams.id || "KP-0001").trim();
+  const resolvedParams = searchParams ? await searchParams : {}
+  const currentId = (resolvedParams.id || 'KP-0001').trim()
 
-  let trainee: ITrainee | null = null;
-  let allTrainees: ITrainee[] = [];
-  let employmentRecord: IEmploymentRecord | null = null;
-  let dbError: string | null = null;
+  let trainee: ITrainee | null = null
+  let allTrainees: ITrainee[] = []
+  let employmentRecord: IEmploymentRecord | null = null
+  let dbError: string | null = null
 
   try {
-    await connectToDatabase();
+    await connectToDatabase()
 
-    allTrainees = (await Trainee.find().sort({ traineeId: 1 }).lean()) as ITrainee[];
+    allTrainees = (await Trainee.find().sort({ traineeId: 1 }).lean()) as ITrainee[]
 
     trainee = (await Trainee.findOne({
       traineeId: currentId,
-    }).lean()) as ITrainee | null;
+    }).lean()) as ITrainee | null
 
     // Fallback to first trainee if requested id is not found
     if (!trainee && allTrainees.length > 0) {
-      trainee = allTrainees[0];
+      trainee = allTrainees[0]
     }
 
     if (trainee) {
       employmentRecord = (await EmploymentRecord.findOne({
         traineeId: trainee.traineeId,
         isCurrent: true,
-      }).lean()) as IEmploymentRecord | null;
+      }).lean()) as IEmploymentRecord | null
     }
   } catch (err) {
-    dbError = err instanceof Error ? err.message : "Database connection failed";
+    dbError = err instanceof Error ? err.message : 'Database connection failed'
   }
 
   if (dbError || !trainee) {
     return (
       <AppShell>
         <PageHeader
-          eyebrow="Trainee"
+          eyebrow="Trainee Passport"
           title="Trainee Outcome Passport"
           description="A single, verifiable record that follows a trainee across the entire journey."
         />
         <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
           <Card className="border-slate-200 bg-white shadow-xs">
-            <CardContent className="flex flex-col items-center justify-center gap-2 p-8 text-center">
-              <AlertTriangle className="size-8 text-amber-700" />
+            <CardContent className="flex flex-col items-center justify-center gap-3 p-10 text-center">
+              <AlertTriangle className="size-10 text-amber-700" />
               <p className="text-base font-bold text-slate-950">
-                {dbError ? "Database Connection Unavailable" : "Trainee Record Not Found"}
+                {dbError ? 'Database Connection Unavailable' : 'Trainee Record Not Found'}
               </p>
               <p className="max-w-md text-xs font-medium text-slate-600">
                 {dbError || `No record found for trainee ID '${currentId}'. Please ensure database is seeded.`}
@@ -97,127 +130,158 @@ export default async function TraineePage({
           </Card>
         </div>
       </AppShell>
-    );
+    )
   }
 
-  const isVerified = employmentRecord?.verificationStatus === "verified";
-  const isPendingVerification = employmentRecord?.verificationStatus === "pending";
-  const isDisputed = employmentRecord?.verificationStatus === "disputed" || employmentRecord?.verificationStatus === "flagged";
+  const isVerified = employmentRecord?.verificationStatus === 'verified'
+  const isPendingVerification = employmentRecord?.verificationStatus === 'pending'
+  const isDisputed =
+    employmentRecord?.verificationStatus === 'disputed' ||
+    employmentRecord?.verificationStatus === 'flagged'
 
   const relevanceInfo = employmentRecord?.trainingRelevance
     ? relevanceLabels[employmentRecord.trainingRelevance] || relevanceLabels.directly_related
-    : null;
+    : null
 
   const formatMonthYear = (d?: Date | string) => {
-    if (!d) return null;
-    const parsed = new Date(d);
+    if (!d) return null
+    const parsed = new Date(d)
     return isNaN(parsed.getTime())
       ? null
-      : parsed.toLocaleDateString("en-IN", { month: "short", year: "numeric" });
-  };
+      : parsed.toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })
+  }
 
   const formatFullDate = (d?: Date | string) => {
-    if (!d) return null;
-    const parsed = new Date(d);
+    if (!d) return null
+    const parsed = new Date(d)
     return isNaN(parsed.getTime())
       ? null
-      : parsed.toLocaleDateString("en-IN", {
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-        });
-  };
+      : parsed.toLocaleDateString('en-IN', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+        })
+  }
 
   const formattedStartDate = employmentRecord?.startDate
-    ? formatMonthYear(employmentRecord.startDate) || "Recent"
-    : "Recent";
+    ? formatMonthYear(employmentRecord.startDate) || 'Recent'
+    : 'Recent'
 
-  const trainingStart = formatMonthYear(trainee.trainingPeriod?.startDate);
-  const trainingEnd = formatMonthYear(trainee.trainingPeriod?.endDate);
-  const trainingHours = trainee.trainingPeriod?.hours;
+  const trainingStart = formatMonthYear(trainee.trainingPeriod?.startDate)
+  const trainingEnd = formatMonthYear(trainee.trainingPeriod?.endDate)
+  const trainingHours = trainee.trainingPeriod?.hours
 
   const formattedTrainingPeriod =
     trainingStart && trainingEnd
       ? `${trainingStart} – ${trainingEnd}${trainingHours ? ` · ${trainingHours} hrs` : ''}`
       : trainingHours
       ? `${trainingHours} hrs completed`
-      : "Training completed";
+      : 'Training completed'
 
   const formattedCertDate = trainee.certificate?.issueDate
     ? formatFullDate(trainee.certificate.issueDate)
-    : null;
+    : null
 
-  const providerName = trainee.trainingProvider || "Maharashtra State Skill Development Society";
+  const providerName = trainee.trainingProvider || 'Maharashtra State Skill Development Society'
 
   // Verification metadata
-  const verifiedAtStr = formatFullDate(employmentRecord?.verificationMetadata?.verifiedAt);
-  const verificationMethod = employmentRecord?.verificationMetadata?.method;
-  const methodLabel = verificationMethod ? (methodLabels[verificationMethod] || verificationMethod.replace(/_/g, " ")) : "Employer Portal Verification";
-  const verifiedByStr = employmentRecord?.verificationMetadata?.verifiedBy;
-  const employerRemarks = employmentRecord?.verificationMetadata?.remarks;
-  const disputeReasonStr = employmentRecord?.verificationMetadata?.disputeReason;
+  const verifiedAtStr = formatFullDate(employmentRecord?.verificationMetadata?.verifiedAt)
+  const verificationMethod = employmentRecord?.verificationMetadata?.method
+  const methodLabel = verificationMethod
+    ? methodLabels[verificationMethod] || verificationMethod.replace(/_/g, ' ')
+    : 'Employer Portal Verification'
+  const verifiedByStr = employmentRecord?.verificationMetadata?.verifiedBy
+  const employerRemarks = employmentRecord?.verificationMetadata?.remarks
+  const disputeReasonStr = employmentRecord?.verificationMetadata?.disputeReason
 
   // Follow-up retention and wage progression calculations
-  const followUps = Array.isArray(employmentRecord?.followUps) ? employmentRecord.followUps : [];
-  const startingWage = employmentRecord?.monthlyWage || 0;
-  const completedFollowUps = followUps.filter((f) => f.status === "retained" && f.currentWage);
-  const latestFollowUpWithWage = completedFollowUps.length > 0
-    ? completedFollowUps[completedFollowUps.length - 1]
-    : null;
-  const latestWage = latestFollowUpWithWage?.currentWage || startingWage;
-  const wageDiff = latestWage - startingWage;
-  const wageGrowthPct = startingWage > 0 ? ((wageDiff / startingWage) * 100).toFixed(1) : "0";
+  const followUps = Array.isArray(employmentRecord?.followUps) ? employmentRecord.followUps : []
+  const startingWage = employmentRecord?.monthlyWage || 0
+  const completedFollowUps = followUps.filter((f) => f.status === 'retained' && f.currentWage)
+  const latestFollowUpWithWage =
+    completedFollowUps.length > 0 ? completedFollowUps[completedFollowUps.length - 1] : null
+  const latestWage = latestFollowUpWithWage?.currentWage || startingWage
+  const wageDiff = latestWage - startingWage
+  const wageGrowthPct =
+    startingWage > 0 ? ((wageDiff / startingWage) * 100).toFixed(1) : '0'
 
+  // 5-Stage Longitudinal Journey Definition
   const journey = [
     {
-      step: "Training completed",
-      date: trainingEnd || "Completed",
-      detail: `${trainee.course} (${formattedTrainingPeriod}) · ${providerName}`,
-      status: "complete" as const,
+      step: 'Training Completed',
+      subtitle: 'Vocational Curriculum',
+      date: trainingEnd || 'Completed',
+      detail: `${trainee.course} · ${providerName}`,
+      subDetail: `${formattedTrainingPeriod}`,
+      status: 'complete' as const,
+      stageNumber: '01',
     },
     {
-      step: "Certification",
-      date: formattedCertDate || "Certified",
+      step: 'NSQF Certification',
+      subtitle: 'Government Assessed',
+      date: formattedCertDate || 'Certified',
       detail: trainee.certificate?.certificateId
-        ? `NSQF Level ${trainee.certificate.nsqfLevel || 4} · ${trainee.certificate.certificateId} (${trainee.certificate.issuer || 'NCVET'})${trainee.certificate.grade ? ` · ${trainee.certificate.grade}` : ''}`
-        : "NSQF Level 4 assessment certified",
-      status: "complete" as const,
+        ? `NSQF Level ${trainee.certificate.nsqfLevel || 4} · ${trainee.certificate.certificateId}`
+        : 'NSQF Level 4 Qualification Certified',
+      subDetail: `Issued by ${trainee.certificate?.issuer || 'NCVET'}${trainee.certificate?.grade ? ` · Grade: ${trainee.certificate.grade}` : ''}`,
+      status: 'complete' as const,
+      stageNumber: '02',
     },
     {
-      step: "Placement",
-      date: employmentRecord ? formattedStartDate : "Pending",
+      step: 'Industry Placement',
+      subtitle: 'Campus / Direct Hire',
+      date: employmentRecord ? formattedStartDate : 'Pending',
       detail: employmentRecord
-        ? `Placed at ${employmentRecord.employerName} (${employmentRecord.jobRole})`
-        : "Awaiting campus placement",
-      status: employmentRecord ? ("complete" as const) : ("pending" as const),
+        ? `${employmentRecord.employerName} · ${employmentRecord.jobRole}`
+        : 'Awaiting placement confirmation',
+      subDetail: employmentRecord
+        ? `Placement District: ${employmentRecord.district || trainee.district} · ${employmentRecord.employmentType?.replace(/_/g, ' ')}`
+        : 'Placement cell active',
+      status: employmentRecord ? ('complete' as const) : ('pending' as const),
+      stageNumber: '03',
     },
     {
-      step: "Employment Verification",
-      date: isVerified ? (verifiedAtStr || "Confirmed") : isDisputed ? "Disputed" : isPendingVerification ? "In review" : "Upcoming",
-      detail: isVerified
-        ? `Verified by ${verifiedByStr || 'Employer HR'}${verifiedAtStr ? ` on ${verifiedAtStr}` : ''} via ${methodLabel}${employerRemarks ? ` · "${employerRemarks}"` : ''}`
-        : isPendingVerification
-        ? "Pending employer confirmation on verification queue"
+      step: 'Employer Verification',
+      subtitle: 'Outcome Confirmation',
+      date: isVerified
+        ? verifiedAtStr || 'Confirmed'
         : isDisputed
-        ? `Verification disputed: ${disputeReasonStr || 'Disputed by employer'}${employerRemarks ? ` (${employerRemarks})` : ''}`
-        : "Verification not initiated",
-      status: isVerified ? ("complete" as const) : ("pending" as const),
+        ? 'Disputed'
+        : isPendingVerification
+        ? 'In Review'
+        : 'Upcoming',
+      detail: isVerified
+        ? `Confirmed by ${verifiedByStr || 'Employer HR'} via ${methodLabel}`
+        : isPendingVerification
+        ? 'Pending employer confirmation in verification queue'
+        : isDisputed
+        ? `Verification Flagged: ${disputeReasonStr || 'Disputed by employer'}`
+        : 'Verification not initiated',
+      subDetail: isVerified && employerRemarks ? `"${employerRemarks}"` : undefined,
+      status: isVerified ? ('complete' as const) : ('pending' as const),
+      stageNumber: '04',
     },
     {
-      step: "Wage & Outcome Tracking",
-      date: employmentRecord ? "Active" : "Upcoming",
+      step: 'Retention & Wage Growth',
+      subtitle: 'Longitudinal Tracking',
+      date: employmentRecord ? 'Active Audit' : 'Upcoming',
       detail: employmentRecord
-        ? `${inr(latestWage)}/mo · ${employmentRecord.employmentType.replace(/_/g, ' ')}${wageDiff > 0 ? ` (+${inr(wageDiff)} increment)` : ''}`
-        : "Wage tracking initiates upon placement",
-      status: isVerified ? ("complete" as const) : ("pending" as const),
+        ? `Current Verified Wage: ${inr(latestWage)}/mo`
+        : 'Retention tracking initiates upon placement',
+      subDetail:
+        wageDiff > 0
+          ? `+${inr(wageDiff)} monthly increment (+${wageGrowthPct}% growth from joining)`
+          : 'Baseline entry wage recorded',
+      status: isVerified ? ('complete' as const) : ('pending' as const),
+      stageNumber: '05',
     },
-  ];
+  ]
 
   const t = {
     photoInitials: trainee.name
-      .split(" ")
+      .split(' ')
       .map((part: string) => part[0])
-      .join(""),
+      .join(''),
     name: trainee.name,
     id: trainee.traineeId,
     district: trainee.district,
@@ -227,144 +291,252 @@ export default async function TraineePage({
     journey,
     skills: Array.isArray(trainee.skills) && trainee.skills.length > 0 ? trainee.skills : [],
     certificate: trainee.certificate,
-    employer: employmentRecord ? employmentRecord.employerName : "Not placed yet",
+    employer: employmentRecord ? employmentRecord.employerName : 'Not placed yet',
     jobRole: employmentRecord?.jobRole,
     wage: latestWage,
-  };
+  }
 
   return (
     <AppShell>
       <PageHeader
-        eyebrow="Trainee"
-        title="Trainee Outcome Passport"
-        description="A single, verifiable record that follows a trainee across the entire journey — training, certification, placement, wages, and retention."
+        eyebrow="Trainee Passport"
+        title="Verifiable Digital Outcome Passport"
+        description="A single, government-verified credential following a trainee across the full longitudinal trajectory — training, NSQF certification, employer verification, 30/90/180-day retention, and wage progression."
       />
 
-      <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
-        {/* Trainee Switcher */}
+      {/* Expanded Desktop Canvas Container (1180–1240px wide for optimal visual pacing) */}
+      <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+        {/* Candidate Switcher (Demo Sandboxing) */}
         {allTrainees.length > 1 && (
-          <div className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white p-3 text-xs shadow-xs">
-            <span className="font-bold uppercase tracking-wider text-slate-600 px-1">
-              Candidate Passport:
-            </span>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-slate-200/90 bg-white p-3.5 shadow-xs">
+            <div className="flex items-center gap-2">
+              <span className="flex size-7 items-center justify-center rounded-lg bg-blue-100 text-blue-800">
+                <UserCheck className="size-4" />
+              </span>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                Demonstration Passport Selector:
+              </span>
+            </div>
             <div className="flex flex-wrap items-center gap-1.5">
               {allTrainees.map((tr) => {
-                const active = tr.traineeId === trainee.traineeId;
+                const active = tr.traineeId === trainee.traineeId
                 return (
                   <Link
                     key={tr.traineeId}
                     href={`/trainee?id=${tr.traineeId}`}
                     className={cn(
-                      'rounded-lg px-3 py-1.5 font-bold transition-all',
+                      'rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all shadow-2xs',
                       active
                         ? 'bg-blue-700 text-white shadow-xs'
-                        : 'border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
+                        : 'border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-950',
                     )}
                   >
-                    {tr.name} ({tr.traineeId})
+                    <span>{tr.name}</span>
+                    <span className={cn('ml-1.5 font-mono text-[11px]', active ? 'text-blue-100' : 'text-slate-500')}>
+                      ({tr.traineeId})
+                    </span>
                   </Link>
-                );
+                )
               })}
             </div>
           </div>
         )}
 
-        {/* Identity Card */}
-        <Card className="border border-slate-200 bg-white shadow-xs">
-          <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center">
-            <div className="flex size-16 shrink-0 items-center justify-center rounded-xl bg-blue-700 text-xl font-black text-white shadow-xs">
-              {t.photoInitials}
+        {/* 1. WHO IS THIS PERSON? — Official Digital Passport Identity Card */}
+        <Card className="overflow-hidden border border-slate-200/90 bg-white shadow-xs">
+          {/* Official Header Ribbon */}
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-50/90 px-5 py-2.5 text-xs">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="size-4 text-blue-700" />
+              <span className="font-bold tracking-wider text-slate-800 uppercase text-[10px] sm:text-xs">
+                Government of Maharashtra • Department of Skills, Employment & Innovation
+              </span>
             </div>
-            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-xl font-black text-slate-950">{t.name}</h2>
-                {isVerified ? (
-                  <Badge variant="success">
-                    <BadgeCheck className="size-3" aria-hidden="true" /> Verified Outcome
-                  </Badge>
-                ) : isPendingVerification ? (
-                  <Badge variant="warning">
-                    <Clock className="size-3" aria-hidden="true" /> Verification Pending
-                  </Badge>
-                ) : isDisputed ? (
-                  <Badge variant="destructive">
-                    <AlertTriangle className="size-3" aria-hidden="true" /> Verification Flagged
-                  </Badge>
-                ) : (
-                  <Badge variant="neutral">Enrolled</Badge>
-                )}
-                {relevanceInfo && (
-                  <Badge variant={relevanceInfo.variant}>
-                    {relevanceInfo.label}
-                  </Badge>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-xs font-bold text-blue-900 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                  {t.id}
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-[10px] font-bold text-slate-700 bg-slate-200/90 px-2.5 py-0.5 rounded border border-slate-300">
+                OFFICIAL RECORD REF: MSSDS/KP/{t.id}
+              </span>
+            </div>
+          </div>
+
+          <CardContent className="flex flex-col gap-5 p-5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
+            {/* Identity Profile Group */}
+            <div className="flex items-start sm:items-center gap-4.5 min-w-0 flex-1">
+              <div className="relative flex size-18 sm:size-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-900 text-2xl font-black text-white shadow-sm border-2 border-white ring-2 ring-blue-600/20">
+                <span>{t.photoInitials}</span>
+                <span
+                  className="absolute -bottom-1.5 -right-1.5 flex size-6.5 items-center justify-center rounded-full bg-emerald-600 text-white ring-2 ring-white shadow-2xs"
+                  title="NSQF Level 4 Certified"
+                >
+                  <Check className="size-4 stroke-[3]" />
                 </span>
               </div>
-              <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1.5 text-xs font-semibold text-slate-700">
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="size-3.5 text-blue-700" aria-hidden="true" /> {t.district}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <GraduationCap className="size-3.5 text-blue-700" aria-hidden="true" /> {t.course}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Building2 className="size-3.5 text-blue-700" aria-hidden="true" /> {t.provider}
-                </span>
-                <span className="flex items-center gap-1.5 text-slate-600 font-medium">
-                  <Calendar className="size-3.5 text-slate-500" aria-hidden="true" /> {t.trainingPeriodStr}
-                </span>
+
+              <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-950">
+                    {t.name}
+                  </h2>
+                  <span className="font-mono text-xs font-bold text-blue-950 bg-blue-100 px-2.5 py-0.5 rounded-md border border-blue-200">
+                    {t.id}
+                  </span>
+                </div>
+
+                {/* Primary Outcome Status Hero */}
+                <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                  {isVerified ? (
+                    <Badge variant="success" className="text-xs px-2.5 py-1 font-bold shadow-2xs">
+                      <BadgeCheck className="size-3.5 text-emerald-700" aria-hidden="true" />
+                      <span>Verified Employment Outcome</span>
+                    </Badge>
+                  ) : isPendingVerification ? (
+                    <Badge variant="warning" className="text-xs px-2.5 py-1 font-bold shadow-2xs">
+                      <Clock className="size-3.5 text-amber-700" aria-hidden="true" />
+                      <span>Employment Verification Pending</span>
+                    </Badge>
+                  ) : isDisputed ? (
+                    <Badge variant="destructive" className="text-xs px-2.5 py-1 font-bold shadow-2xs">
+                      <AlertTriangle className="size-3.5 text-rose-700" aria-hidden="true" />
+                      <span>Verification Flagged / Disputed</span>
+                    </Badge>
+                  ) : (
+                    <Badge variant="neutral" className="text-xs px-2.5 py-1 font-bold">
+                      Training Completed
+                    </Badge>
+                  )}
+
+                  {relevanceInfo && (
+                    <Badge variant={relevanceInfo.variant} className="text-xs px-2.5 py-1 font-bold shadow-2xs">
+                      {relevanceInfo.label}
+                    </Badge>
+                  )}
+                </div>
+
+                {/* Metadata Strip */}
+                <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs font-semibold text-slate-700">
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="size-3.5 text-blue-700 shrink-0" aria-hidden="true" />
+                    <span>{t.district} District</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <GraduationCap className="size-3.5 text-blue-700 shrink-0" aria-hidden="true" />
+                    <span>{t.course}</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Building2 className="size-3.5 text-blue-700 shrink-0" aria-hidden="true" />
+                    <span className="truncate">{t.provider}</span>
+                  </span>
+                  <span className="flex items-center gap-1.5 text-slate-600 font-medium">
+                    <Calendar className="size-3.5 text-slate-500 shrink-0" aria-hidden="true" />
+                    <span>{t.trainingPeriodStr}</span>
+                  </span>
+                </div>
               </div>
             </div>
+
+            {/* Quick Outcome Status Badge Box */}
+            {employmentRecord && (
+              <div className="flex shrink-0 flex-col justify-center rounded-xl border border-slate-200 bg-slate-50/90 p-4 text-left lg:text-right lg:min-w-[220px] shadow-2xs">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                  Current Verified Wage
+                </span>
+                <span className="mt-0.5 text-2xl sm:text-3xl font-black tracking-tight text-slate-950 tabular-nums">
+                  {inr(latestWage)}<span className="text-xs font-semibold text-slate-600">/mo</span>
+                </span>
+                <span className="mt-0.5 text-xs font-semibold text-slate-700 truncate">
+                  {employmentRecord.employerName}
+                </span>
+              </div>
+            )}
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {/* Left Column */}
-          <div className="flex flex-col gap-6 lg:col-span-2">
-            {/* Outcome Journey Timeline */}
-            <Card className="border border-slate-200 bg-white shadow-xs">
-              <CardHeader>
-                <CardTitle className="text-base font-bold text-slate-950">Outcome Journey</CardTitle>
-                <CardDescription className="text-xs text-slate-600">
-                  Training → Certification → Placement → Employment Verification → Wage Progression
-                </CardDescription>
+        {/* 2-COLUMN BALANCED COMMAND GRID */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8">
+          {/* LEFT COLUMN: PRIMARY LONGITUDINAL TRAJECTORY (7 of 12 Columns) */}
+          <div className="flex flex-col gap-6 lg:col-span-7">
+            {/* 2. SIGNATURE LONGITUDINAL OUTCOME JOURNEY */}
+            <Card className="overflow-hidden border border-slate-200/90 bg-white shadow-xs">
+              <CardHeader className="border-b border-slate-100 bg-slate-50/80 px-5 py-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-700 text-white shadow-xs">
+                      <Layers className="size-4.5" />
+                    </span>
+                    <div>
+                      <CardTitle className="text-base font-bold text-slate-950 sm:text-lg">
+                        Longitudinal Outcome Journey
+                      </CardTitle>
+                      <CardDescription className="text-xs font-medium text-slate-600">
+                        Training → Certification → Placement → Verification → Retention & Wage Growth
+                      </CardDescription>
+                    </div>
+                  </div>
+                  <Badge variant="default" className="text-[11px] font-bold shrink-0">
+                    5-Stage Audit Trail
+                  </Badge>
+                </div>
               </CardHeader>
-              <CardContent>
-                <ol className="relative flex flex-col gap-6 pl-2">
+
+              <CardContent className="p-5 sm:p-6">
+                <ol className="relative flex flex-col gap-5">
                   {t.journey.map((j, i) => {
                     const done = j.status === 'complete'
+                    const isLast = i === t.journey.length - 1
                     return (
-                      <li key={j.step} className="relative flex gap-4">
-                        {i < t.journey.length - 1 ? (
+                      <li key={j.step} className="relative flex items-start gap-4">
+                        {/* Connecting Line Track */}
+                        {!isLast ? (
                           <span
-                            className="absolute left-[13px] top-7 h-full w-px bg-slate-200"
+                            className={cn(
+                              'absolute left-[16px] top-9 h-[calc(100%+6px)] w-0.5 rounded-full transition-colors',
+                              done ? 'bg-emerald-500' : 'bg-slate-300',
+                            )}
                             aria-hidden="true"
                           />
                         ) : null}
-                        <span
+
+                        {/* Milestone Node Badge */}
+                        <div
                           className={cn(
-                            'z-10 flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold shadow-2xs',
+                            'z-10 flex size-8.5 shrink-0 items-center justify-center rounded-full border shadow-2xs font-bold text-xs transition-transform duration-200',
                             done
-                              ? 'border-emerald-300 bg-emerald-100 text-emerald-800'
-                              : 'border-amber-300 bg-amber-100 text-amber-800',
+                              ? 'border-emerald-600 bg-emerald-600 text-white ring-4 ring-emerald-100'
+                              : 'border-amber-500 bg-amber-500 text-white ring-4 ring-amber-100',
                           )}
                         >
                           {done ? (
-                            <Check className="size-4" aria-hidden="true" />
+                            <Check className="size-4.5 stroke-[3]" aria-hidden="true" />
                           ) : (
-                            <Clock className="size-4" aria-hidden="true" />
+                            <Clock className="size-4 stroke-[2.5]" aria-hidden="true" />
                           )}
-                        </span>
-                        <div className="flex flex-1 flex-col gap-0.5 pb-1">
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <span className="text-sm font-bold text-slate-950">{j.step}</span>
-                            <span className="text-xs font-bold text-slate-600">{j.date}</span>
+                        </div>
+
+                        {/* Milestone Detailed Box */}
+                        <div className="flex flex-1 flex-col gap-1 rounded-xl border border-slate-200/90 bg-slate-50/70 p-4 text-xs shadow-2xs transition-colors hover:border-slate-300">
+                          <div className="flex flex-wrap items-center justify-between gap-1.5">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-sm text-slate-950">
+                                {j.step}
+                              </span>
+                              <span className="rounded bg-slate-200/90 px-1.5 py-0.2 font-mono text-[10px] font-bold text-slate-700">
+                                STAGE {j.stageNumber}
+                              </span>
+                            </div>
+                            <span className="font-bold text-xs text-blue-900 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 shadow-2xs">
+                              {j.date}
+                            </span>
                           </div>
-                          <span className="text-xs font-medium text-slate-700 leading-relaxed">{j.detail}</span>
+
+                          <p className="font-bold text-slate-800 text-xs sm:text-[13px] leading-normal pt-0.5">
+                            {j.detail}
+                          </p>
+
+                          {j.subDetail && (
+                            <p className="text-xs font-medium text-slate-600 leading-normal">
+                              {j.subDetail}
+                            </p>
+                          )}
                         </div>
                       </li>
                     )
@@ -373,95 +545,103 @@ export default async function TraineePage({
               </CardContent>
             </Card>
 
-            {/* Post-Placement Retention Card */}
-            <Card className="border border-slate-200 bg-white shadow-xs">
-              <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3">
-                <div>
-                  <CardTitle className="flex items-center gap-2 text-base font-bold text-slate-950">
-                    <TrendingUp className="size-4.5 text-blue-700" aria-hidden="true" />
-                    Post-Placement Retention & Career Outcome
-                  </CardTitle>
-                  <CardDescription className="text-xs text-slate-600">
-                    Longitudinal outcome milestones at 30, 90, 180, and 365 days
-                  </CardDescription>
-                </div>
-                {/* Wage Progression Indicator */}
-                {startingWage > 0 && (
-                  <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50/80 px-3 py-1.5 text-xs">
-                    <span className="font-bold text-slate-700">Wage Progression:</span>
-                    {wageDiff > 0 ? (
-                      <div className="flex items-center gap-1 font-bold text-emerald-800">
-                        <span>{inr(startingWage)}</span>
-                        <span>→</span>
-                        <span>{inr(latestWage)}</span>
-                        <Badge variant="success" className="ml-1 text-[10px] py-0 px-1.5 font-bold">
-                          +{inr(wageDiff)} (+{wageGrowthPct}%)
-                        </Badge>
-                      </div>
-                    ) : (
-                      <span className="font-bold text-slate-950">{inr(startingWage)}/mo</span>
-                    )}
+            {/* 3. POST-PLACEMENT RETENTION & WAGE PROGRESSION */}
+            <Card className="overflow-hidden border border-slate-200/90 bg-white shadow-xs">
+              <CardHeader className="border-b border-slate-100 bg-slate-50/80 px-5 py-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-700 text-white shadow-xs">
+                      <TrendingUp className="size-4.5" />
+                    </span>
+                    <div>
+                      <CardTitle className="text-base font-bold text-slate-950 sm:text-lg">
+                        Post-Placement Retention & Wage Progression
+                      </CardTitle>
+                      <CardDescription className="text-xs font-medium text-slate-600">
+                        Longitudinal on-job retention audits at 30, 90, 180, and 365 days
+                      </CardDescription>
+                    </div>
                   </div>
-                )}
+
+                  {/* Wage Progression Indicator */}
+                  {startingWage > 0 && (
+                    <div className="flex items-center gap-2 rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs shadow-2xs">
+                      <span className="font-bold text-slate-700">Wage Delta:</span>
+                      {wageDiff > 0 ? (
+                        <div className="flex items-center gap-1.5 font-bold text-emerald-950">
+                          <span>{inr(startingWage)}</span>
+                          <span>→</span>
+                          <span>{inr(latestWage)}</span>
+                          <Badge variant="success" className="text-[10px] py-0 px-1.5 font-bold">
+                            +{inr(wageDiff)} (+{wageGrowthPct}%)
+                          </Badge>
+                        </div>
+                      ) : (
+                        <span className="font-bold text-slate-950">{inr(startingWage)}/mo</span>
+                      )}
+                    </div>
+                  )}
+                </div>
               </CardHeader>
-              <CardContent>
+
+              <CardContent className="p-5 sm:p-6">
                 {followUps.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     {followUps.map((f, idx) => {
-                      const isRetained = f.status === "retained" || f.status === "wage_increased";
-                      const isLeft = f.status === "left_job";
-                      const isPending = f.status === "pending";
-                      const completedDateStr = formatMonthYear(f.completedDate);
-                      const dueDateStr = formatMonthYear(f.dueDate);
+                      const isRetained = f.status === 'retained' || f.status === 'wage_increased'
+                      const isLeft = f.status === 'left_job'
+                      const isPending = f.status === 'pending'
+                      const completedDateStr = formatMonthYear(f.completedDate)
+                      const dueDateStr = formatMonthYear(f.dueDate)
 
                       return (
                         <div
                           key={f.milestone || idx}
                           className={cn(
-                            "flex flex-col justify-between rounded-xl border p-3.5 text-xs transition-colors",
+                            'flex flex-col justify-between rounded-xl border p-4 text-xs transition-all shadow-2xs',
                             isRetained
-                              ? "border-emerald-200 bg-emerald-50/70"
+                              ? 'border-emerald-300 bg-emerald-50/70 hover:border-emerald-400 hover:shadow-xs'
                               : isLeft
-                              ? "border-rose-200 bg-rose-50/70"
-                              : "border-slate-200 bg-slate-50/80"
+                              ? 'border-rose-300 bg-rose-50/70 hover:border-rose-400 hover:shadow-xs'
+                              : 'border-slate-200 bg-slate-50/80 hover:border-slate-300',
                           )}
                         >
-                          <div className="flex items-center justify-between gap-2 mb-1.5">
-                            <span className="font-bold text-slate-950">
-                              {milestoneLabels[f.milestone] || f.milestone.replace(/_/g, " ")}
+                          <div className="flex items-center justify-between gap-2 mb-2">
+                            <span className="font-bold text-slate-950 text-xs sm:text-sm">
+                              {milestoneLabels[f.milestone] || f.milestone.replace(/_/g, ' ')}
                             </span>
                             {isRetained ? (
-                              <Badge variant="success" className="text-[10px] py-0 font-bold">
-                                <CheckCircle2 className="size-2.5 mr-0.5" /> Retained
+                              <Badge variant="success" className="text-[10px] py-0.5 font-bold">
+                                <CheckCircle2 className="size-3 mr-1 text-emerald-700" /> Retained
                               </Badge>
                             ) : isLeft ? (
-                              <Badge variant="destructive" className="text-[10px] py-0 font-bold">
-                                <XCircle className="size-2.5 mr-0.5" /> Discontinued
+                              <Badge variant="destructive" className="text-[10px] py-0.5 font-bold">
+                                <XCircle className="size-3 mr-1 text-rose-700" /> Discontinued
                               </Badge>
                             ) : (
-                              <Badge variant="neutral" className="text-[10px] py-0 font-bold">
-                                <Clock className="size-2.5 mr-0.5" /> In Progress
+                              <Badge variant="neutral" className="text-[10px] py-0.5 font-bold">
+                                <Clock className="size-3 mr-1 text-slate-500" /> Scheduled
                               </Badge>
                             )}
                           </div>
 
-                          <div className="flex flex-col gap-1 text-slate-700 font-medium mt-1">
+                          <div className="flex flex-col gap-1.5 text-slate-700 font-medium mt-1 border-t border-slate-200/60 pt-2.5">
                             {isRetained && (
                               <>
                                 <div className="flex items-center justify-between">
                                   <span className="text-slate-600 font-semibold">Verified Wage:</span>
-                                  <span className="font-bold text-slate-950">
+                                  <span className="font-bold text-slate-950 tabular-nums">
                                     {f.currentWage ? `${inr(f.currentWage)}/mo` : `${inr(startingWage)}/mo`}
                                   </span>
                                 </div>
                                 {completedDateStr && (
                                   <div className="flex items-center justify-between text-[11px]">
-                                    <span className="text-slate-500">Verified On:</span>
+                                    <span className="text-slate-500">Audit Date:</span>
                                     <span className="font-semibold text-slate-800">{completedDateStr}</span>
                                   </div>
                                 )}
                                 {f.notes && (
-                                  <p className="mt-1 text-[11px] text-slate-700 italic">
+                                  <p className="mt-1 text-[11px] text-slate-700 italic bg-white/80 p-2 rounded border border-emerald-200">
                                     &ldquo;{f.notes}&rdquo;
                                   </p>
                                 )}
@@ -471,10 +651,10 @@ export default async function TraineePage({
                             {isLeft && (
                               <>
                                 <p className="text-rose-900 text-[11px] font-bold">
-                                  {f.notes || "Candidate did not join or left role"}
+                                  {f.notes || 'Candidate did not join or left role'}
                                 </p>
                                 {dueDateStr && (
-                                  <span className="text-[11px] text-slate-600">Milestone date: {dueDateStr}</span>
+                                  <span className="text-[11px] text-slate-600">Milestone audit: {dueDateStr}</span>
                                 )}
                               </>
                             )}
@@ -482,8 +662,8 @@ export default async function TraineePage({
                             {isPending && (
                               <>
                                 <div className="flex items-center justify-between">
-                                  <span className="text-slate-600">Tracking Status:</span>
-                                  <span className="text-slate-800 font-bold">Scheduled</span>
+                                  <span className="text-slate-600">Audit Status:</span>
+                                  <span className="text-slate-800 font-bold">Scheduled Follow-up</span>
                                 </div>
                                 {dueDateStr && (
                                   <div className="flex items-center justify-between text-[11px]">
@@ -495,7 +675,7 @@ export default async function TraineePage({
                             )}
                           </div>
                         </div>
-                      );
+                      )
                     })}
                   </div>
                 ) : (
@@ -506,230 +686,235 @@ export default async function TraineePage({
               </CardContent>
             </Card>
 
-            {/* AI Career Intelligence Section */}
+            {/* 4. AI CAREER INTELLIGENCE (Decision Support) */}
             <CareerIntelligenceCard traineeId={trainee.traineeId} />
           </div>
 
-          {/* Right Column */}
-          <div className="flex flex-col gap-6">
-            {/* Verified Credential Card */}
-            <Card className="border border-slate-200 bg-white shadow-xs">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-sm font-bold text-slate-950">
-                  <ShieldCheck className="size-4.5 text-emerald-700" aria-hidden="true" />
-                  Verified Credential
-                </CardTitle>
-                <CardDescription className="text-xs text-slate-600">
-                  Government-recognized qualification certificate
-                </CardDescription>
+          {/* RIGHT COLUMN: COHESIVE EVIDENCE & CREDENTIALS DOSSIER (5 of 12 Columns) */}
+          <div className="flex flex-col gap-6 lg:col-span-5">
+            {/* Unified Government Verified Evidence Dossier Card (Reduces "card wall" effect) */}
+            <Card className="overflow-hidden border border-slate-200/90 bg-white shadow-xs">
+              {/* Dossier Header */}
+              <CardHeader className="border-b border-slate-200 bg-slate-50/90 px-5 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-700 text-white shadow-xs">
+                      <FileBadge className="size-4.5" />
+                    </span>
+                    <div>
+                      <CardTitle className="text-base font-bold text-slate-950">
+                        Verified Evidence Dossier
+                      </CardTitle>
+                      <CardDescription className="text-xs font-medium text-slate-600">
+                        Official credentials, skill assessments & employer records
+                      </CardDescription>
+                    </div>
+                  </div>
+                  <Badge variant="success" className="text-[10px] font-bold">
+                    Official Evidence
+                  </Badge>
+                </div>
               </CardHeader>
-              <CardContent>
-                {t.certificate?.certificateId ? (
-                  <div className="flex flex-col gap-2.5 text-xs">
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                      <span className="font-bold text-slate-600">Certificate ID</span>
-                      <span className="font-mono font-bold text-blue-900 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                        {t.certificate.certificateId}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                      <span className="font-bold text-slate-600">Framework Level</span>
-                      <Badge variant="neutral" className="text-[11px] font-bold">
-                        NSQF Level {t.certificate.nsqfLevel || 4}
+
+              <CardContent className="divide-y divide-slate-200/80 p-0">
+                {/* Dossier Section 1: Qualification Certificate */}
+                <div className="p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-700">
+                      <FileCheck2 className="size-4 text-emerald-700" />
+                      <span>NSQF Qualification Certificate</span>
+                    </span>
+                    {t.certificate?.grade && (
+                      <Badge variant="success" className="text-[11px] font-bold">
+                        Grade {t.certificate.grade}
                       </Badge>
-                    </div>
-                    {t.certificate.issuer && (
-                      <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                        <span className="font-bold text-slate-600">Issuing Body</span>
-                        <span className="font-bold text-right text-slate-950">{t.certificate.issuer}</span>
-                      </div>
-                    )}
-                    {t.certificate.grade && (
-                      <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                        <span className="font-bold text-slate-600">Grade</span>
-                        <Badge variant="success" className="text-[11px] font-bold">
-                          {t.certificate.grade}
-                        </Badge>
-                      </div>
-                    )}
-                    {formattedCertDate && (
-                      <div className="flex items-center justify-between pt-0.5">
-                        <span className="font-bold text-slate-600">Issue Date</span>
-                        <span className="font-semibold text-slate-800">{formattedCertDate}</span>
-                      </div>
                     )}
                   </div>
-                ) : (
-                  <p className="text-xs font-medium text-slate-600">Certificate information pending issuance</p>
-                )}
-              </CardContent>
-            </Card>
 
-            {/* Certified Skills Card */}
-            <Card className="border border-slate-200 bg-white shadow-xs">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-sm font-bold text-slate-950">
-                  <Award className="size-4.5 text-blue-700" aria-hidden="true" />
-                  Certified Skills
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {t.skills.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {t.skills.map((s: string) => (
-                      <Badge key={s} variant="neutral" className="px-2.5 py-1 text-xs font-bold">
-                        {s}
-                      </Badge>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-xs font-medium text-slate-600">No certified skills listed</p>
-                )}
-              </CardContent>
-            </Card>
+                  {t.certificate?.certificateId ? (
+                    <div className="flex flex-col gap-2 rounded-lg bg-slate-50 p-3 text-xs border border-slate-200/80">
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-600 font-semibold">Certificate ID:</span>
+                        <span className="font-mono font-bold text-blue-950">{t.certificate.certificateId}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-600 font-semibold">Framework Level:</span>
+                        <span className="font-bold text-slate-950">NSQF Level {t.certificate.nsqfLevel || 4}</span>
+                      </div>
+                      {t.certificate.issuer && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-600 font-semibold">Awarding Body:</span>
+                          <span className="font-bold text-slate-950">{t.certificate.issuer}</span>
+                        </div>
+                      )}
+                      {formattedCertDate && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-600 font-semibold">Issue Date:</span>
+                          <span className="font-semibold text-slate-800">{formattedCertDate}</span>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="text-xs font-medium text-slate-600">Certificate information pending issuance.</p>
+                  )}
+                </div>
 
-            {/* Current Employer Card */}
-            <Card className="border border-slate-200 bg-white shadow-xs">
-              <CardHeader>
-                <CardTitle className="text-sm font-bold text-slate-950">Current Employer</CardTitle>
-                <CardDescription className="text-xs text-slate-600">
-                  {employmentRecord
-                    ? 'Connected database outcome record'
-                    : 'Awaiting placement confirmation'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-3">
-                <div className="flex items-center gap-3">
-                  <span className="flex size-10 items-center justify-center rounded-xl border border-blue-200 bg-blue-50 text-blue-700 shadow-2xs">
-                    <Building2 className="size-5" aria-hidden="true" />
+                {/* Dossier Section 2: Certified Competencies */}
+                <div className="p-5">
+                  <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-700 mb-2.5">
+                    <Award className="size-4 text-blue-700" />
+                    <span>Certified Competencies</span>
                   </span>
-                  <div className="flex flex-col">
-                    <p className="text-sm font-bold text-slate-950">{t.employer}</p>
-                    {t.jobRole && (
-                      <p className="text-xs font-medium text-slate-700">{t.jobRole}</p>
-                    )}
-                    {relevanceInfo && (
-                      <div className="mt-1">
-                        <Badge variant={relevanceInfo.variant} className="text-[11px] font-bold">
-                          {relevanceInfo.label}
+                  {t.skills.length > 0 ? (
+                    <div className="flex flex-wrap gap-1.5">
+                      {t.skills.map((s: string) => (
+                        <Badge key={s} variant="neutral" className="px-2.5 py-1 text-xs font-bold shadow-2xs">
+                          {s}
                         </Badge>
-                      </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs font-medium text-slate-600">No certified skills listed.</p>
+                  )}
+                </div>
+
+                {/* Dossier Section 3: Employer Placement & Trade Alignment */}
+                <div className="p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-700">
+                      <Briefcase className="size-4 text-blue-700" />
+                      <span>Current Employer Placement</span>
+                    </span>
+                    {isVerified && (
+                      <Badge variant="success" className="text-[10px] font-bold">
+                        <Check className="size-3 mr-0.5" /> Verified
+                      </Badge>
                     )}
-                    {employmentRecord && (
-                      <div className="mt-1 flex items-center gap-2">
-                        {isVerified ? (
-                          <p className="text-xs font-bold text-emerald-800">
-                            Verified · {inr(latestWage)}/mo
-                          </p>
-                        ) : isPendingVerification ? (
-                          <p className="text-xs font-bold text-amber-800">
-                            Pending confirmation · {inr(startingWage)}/mo
-                          </p>
-                        ) : isDisputed ? (
-                          <p className="text-xs font-bold text-rose-800">
-                            Disputed · {inr(startingWage)}/mo
-                          </p>
-                        ) : (
-                          <p className="text-xs font-bold text-slate-700">
-                            Status: {employmentRecord.verificationStatus}
-                          </p>
-                        )}
-                      </div>
-                    )}
+                  </div>
+
+                  <div className="flex items-start gap-3 rounded-lg bg-slate-50 p-3 border border-slate-200/80">
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
+                      <Building2 className="size-5" aria-hidden="true" />
+                    </span>
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      <p className="text-sm font-bold text-slate-950">{t.employer}</p>
+                      {t.jobRole && (
+                        <p className="text-xs font-semibold text-slate-700">{t.jobRole}</p>
+                      )}
+                      {relevanceInfo && (
+                        <div className="mt-1.5 flex items-center gap-1.5">
+                          <Badge variant={relevanceInfo.variant} className="text-[11px] font-bold">
+                            {relevanceInfo.label}
+                          </Badge>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                {/* Verification Evidence Audit Block */}
+                {/* Dossier Section 4: Employer Verification Evidence Audit Box */}
                 {employmentRecord && (
-                  <div className={cn(
-                    "mt-2 flex flex-col gap-2 rounded-xl border p-3.5 text-xs",
-                    isVerified
-                      ? "border-emerald-200 bg-emerald-50/80"
-                      : isDisputed
-                      ? "border-rose-200 bg-rose-50/80"
-                      : "border-amber-200 bg-amber-50/80"
-                  )}>
-                    <div className="flex items-center justify-between border-b border-slate-200/60 pb-2">
-                      <span className="font-bold text-slate-950 flex items-center gap-1.5">
+                  <div className="p-5">
+                    <div
+                      className={cn(
+                        'flex flex-col gap-2.5 rounded-xl border p-4 text-xs shadow-2xs',
+                        isVerified
+                          ? 'border-emerald-300 bg-emerald-50/80'
+                          : isDisputed
+                          ? 'border-rose-300 bg-rose-50/80'
+                          : 'border-amber-300 bg-amber-50/80',
+                      )}
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-200/70 pb-2">
+                        <span className="font-bold text-slate-950 flex items-center gap-1.5">
+                          {isVerified ? (
+                            <>
+                              <BadgeCheck className="size-4 text-emerald-700" />
+                              <span>Employer Verification Evidence</span>
+                            </>
+                          ) : isDisputed ? (
+                            <>
+                              <AlertTriangle className="size-4 text-rose-700" />
+                              <span>Verification Disputed</span>
+                            </>
+                          ) : (
+                            <>
+                              <Clock className="size-4 text-amber-700" />
+                              <span>Verification In Progress</span>
+                            </>
+                          )}
+                        </span>
                         {isVerified ? (
-                          <>
-                            <BadgeCheck className="size-3.5 text-emerald-700" />
-                            <span>Employer Verification Evidence</span>
-                          </>
+                          <Badge variant="success" className="text-[10px] py-0 font-bold">
+                            Confirmed
+                          </Badge>
                         ) : isDisputed ? (
-                          <>
-                            <AlertTriangle className="size-3.5 text-rose-700" />
-                            <span>Verification Disputed</span>
-                          </>
+                          <Badge variant="destructive" className="text-[10px] py-0 font-bold">
+                            Disputed
+                          </Badge>
                         ) : (
-                          <>
-                            <Clock className="size-3.5 text-amber-700" />
-                            <span>Verification In Progress</span>
-                          </>
+                          <Badge variant="warning" className="text-[10px] py-0 font-bold">
+                            Pending
+                          </Badge>
                         )}
-                      </span>
-                      {isVerified ? (
-                        <Badge variant="success" className="text-[10px] py-0 font-bold">Verified</Badge>
-                      ) : isDisputed ? (
-                        <Badge variant="destructive" className="text-[10px] py-0 font-bold">Disputed</Badge>
-                      ) : (
-                        <Badge variant="warning" className="text-[10px] py-0 font-bold">Pending</Badge>
+                      </div>
+
+                      {isVerified && (
+                        <div className="flex flex-col gap-1.5 text-slate-700 font-medium">
+                          <div className="flex items-center justify-between">
+                            <span className="text-slate-600">Verified By:</span>
+                            <span className="font-bold text-slate-950">{verifiedByStr || 'Employer HR'}</span>
+                          </div>
+                          {verifiedAtStr && (
+                            <div className="flex items-center justify-between text-[11px]">
+                              <span className="text-slate-600">Verified On:</span>
+                              <span className="font-bold text-slate-950">{verifiedAtStr}</span>
+                            </div>
+                          )}
+                          <div className="flex items-center justify-between text-[11px]">
+                            <span className="text-slate-600">Audit Channel:</span>
+                            <span className="font-bold text-slate-950">{methodLabel}</span>
+                          </div>
+                          {employerRemarks && (
+                            <div className="mt-1.5 rounded-lg bg-white p-2.5 text-[11px] font-medium text-slate-900 italic border border-emerald-200">
+                              &ldquo;{employerRemarks}&rdquo;
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {isDisputed && (
+                        <div className="flex flex-col gap-1.5 text-slate-700 font-medium">
+                          <div className="flex flex-col gap-0.5">
+                            <span className="font-bold text-rose-950">Dispute Reason:</span>
+                            <span className="font-semibold text-slate-900">
+                              {disputeReasonStr || 'Trainee did not join on scheduled date'}
+                            </span>
+                          </div>
+                          {employerRemarks && (
+                            <div className="mt-1.5 rounded-lg bg-white p-2.5 text-[11px] font-medium text-slate-900 italic border border-rose-200">
+                              &ldquo;{employerRemarks}&rdquo;
+                            </div>
+                          )}
+                          <div className="flex items-center justify-between text-[11px] pt-1">
+                            <span className="text-slate-600">Channel:</span>
+                            <span className="font-bold text-slate-950">{methodLabel}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {isPendingVerification && (
+                        <div className="flex flex-col gap-1.5 text-slate-700 font-medium">
+                          <p className="text-[11px] text-slate-700 leading-normal">
+                            Awaiting confirmation on the employer verification queue.
+                          </p>
+                          <div className="flex items-center justify-between text-[11px] pt-1">
+                            <span className="text-slate-600">Channel:</span>
+                            <span className="font-bold text-slate-950">{methodLabel}</span>
+                          </div>
+                        </div>
                       )}
                     </div>
-
-                    {isVerified && (
-                      <div className="flex flex-col gap-1 text-slate-700 font-medium">
-                        <div className="flex items-center justify-between">
-                          <span className="text-slate-600">Verified By:</span>
-                          <span className="font-bold text-slate-950">{verifiedByStr || "Employer HR"}</span>
-                        </div>
-                        {verifiedAtStr && (
-                          <div className="flex items-center justify-between text-[11px]">
-                            <span className="text-slate-600">Verified On:</span>
-                            <span className="font-bold text-slate-950">{verifiedAtStr}</span>
-                          </div>
-                        )}
-                        <div className="flex items-center justify-between text-[11px]">
-                          <span className="text-slate-600">Method:</span>
-                          <span className="font-bold text-slate-950">{methodLabel}</span>
-                        </div>
-                        {employerRemarks && (
-                          <div className="mt-1 rounded-md bg-white p-2 text-[11px] font-semibold text-slate-800 italic border border-emerald-200">
-                            &ldquo;{employerRemarks}&rdquo;
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {isDisputed && (
-                      <div className="flex flex-col gap-1 text-slate-700 font-medium">
-                        <div className="flex flex-col gap-0.5">
-                          <span className="font-bold text-rose-950">Dispute Reason:</span>
-                          <span className="font-semibold text-slate-900">{disputeReasonStr || "Trainee did not join on scheduled date"}</span>
-                        </div>
-                        {employerRemarks && (
-                          <div className="mt-1 rounded-md bg-white p-2 text-[11px] font-semibold text-slate-800 italic border border-rose-200">
-                            &ldquo;{employerRemarks}&rdquo;
-                          </div>
-                        )}
-                        <div className="flex items-center justify-between text-[11px] pt-1">
-                          <span className="text-slate-600">Channel:</span>
-                          <span className="font-bold text-slate-950">{methodLabel}</span>
-                        </div>
-                      </div>
-                    )}
-
-                    {isPendingVerification && (
-                      <div className="flex flex-col gap-1 text-slate-700 font-medium">
-                        <p className="text-[11px] text-slate-700">
-                          Awaiting confirmation on the employer verification queue.
-                        </p>
-                        <div className="flex items-center justify-between text-[11px] pt-1">
-                          <span className="text-slate-600">Verification Channel:</span>
-                          <span className="font-bold text-slate-950">{methodLabel}</span>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 )}
               </CardContent>

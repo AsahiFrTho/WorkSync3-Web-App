@@ -1,4 +1,4 @@
-import type * as React from 'react'
+﻿import type * as React from 'react'
 import { cn } from '@/lib/utils'
 
 interface ProgressProps extends React.ComponentProps<'div'> {
@@ -12,7 +12,7 @@ function Progress({
   indicatorClassName,
   ...props
 }: ProgressProps) {
-  const clamped = Math.max(0, Math.min(100, value))
+  const clamped = Math.max(0, Math.min(100, isNaN(value) ? 0 : value))
   return (
     <div
       role="progressbar"
@@ -20,13 +20,13 @@ function Progress({
       aria-valuemin={0}
       aria-valuemax={100}
       className={cn(
-        'relative h-2 w-full overflow-hidden rounded-full bg-muted',
+        'relative h-2 w-full overflow-hidden rounded-full bg-slate-200/90',
         className,
       )}
       {...props}
     >
       <div
-        className={cn('h-full rounded-full bg-primary transition-all', indicatorClassName)}
+        className={cn('h-full rounded-full bg-blue-700 transition-all duration-300 ease-in-out', indicatorClassName)}
         style={{ width: `${clamped}%` }}
       />
     </div>

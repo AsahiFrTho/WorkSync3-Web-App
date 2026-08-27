@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import {
@@ -12,6 +12,8 @@ import {
   AlertTriangle,
   RefreshCw,
   Cpu,
+  Layers,
+  ShieldAlert,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -91,20 +93,20 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
   const isFallback = source === 'evidence-fallback'
 
   return (
-    <Card className="overflow-hidden border border-slate-200 bg-white shadow-xs">
+    <Card className="overflow-hidden border border-slate-200/90 bg-white shadow-xs">
       {/* Header Banner */}
       <CardHeader className="border-b border-slate-200 bg-purple-50/80 px-5 py-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-purple-600 text-white shadow-xs">
-              <Sparkles className="size-4.5" aria-hidden="true" />
+            <span className="flex size-7.5 items-center justify-center rounded-lg bg-purple-700 text-white shadow-xs">
+              <Sparkles className="size-4" aria-hidden="true" />
             </span>
             <div>
               <CardTitle className="text-sm font-bold text-purple-950 sm:text-base">
-                AI Career Intelligence
+                AI Career Intelligence & Upskilling Pathway
               </CardTitle>
               <CardDescription className="text-xs font-semibold text-purple-800">
-                Longitudinal outcome prediction, trade alignment, and career progression
+                Decision support synthesizing verified credentials, trade alignment, and career trajectories
               </CardDescription>
             </div>
           </div>
@@ -122,19 +124,23 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
         </div>
       </CardHeader>
 
-      <CardContent className="p-5">
-        {/* Loading State */}
+      <CardContent className="p-5 sm:p-6">
+        {/* Skeleton Pulse Loading State */}
         {loading && (
-          <div className="flex flex-col items-center justify-center gap-3 py-10 text-center">
-            <div className="flex size-10 items-center justify-center rounded-full bg-purple-50 text-purple-700 animate-pulse">
-              <Brain className="size-5 animate-spin" />
+          <div className="flex flex-col gap-4 py-3 animate-pulse">
+            <div className="flex items-center gap-3">
+              <div className="size-8 rounded-lg bg-purple-100" />
+              <div className="flex-1 space-y-1.5">
+                <div className="h-4 w-1/3 rounded bg-slate-200" />
+                <div className="h-3 w-2/3 rounded bg-slate-100" />
+              </div>
             </div>
-            <p className="text-sm font-bold text-slate-900">
-              Generating Career Intelligence synthesis...
-            </p>
-            <p className="text-xs font-medium text-slate-500">
-              Aggregating verified training, NSQF certification, and wage progression evidence.
-            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+              <div className="h-20 rounded-xl bg-slate-100" />
+              <div className="h-20 rounded-xl bg-slate-100" />
+              <div className="h-20 rounded-xl bg-slate-100" />
+            </div>
+            <div className="h-24 rounded-xl bg-purple-50/70" />
           </div>
         )}
 
@@ -156,7 +162,7 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
               onClick={fetchIntelligence}
               className="mt-1 h-8 text-xs font-bold border-slate-300 bg-white hover:bg-slate-100"
             >
-              <RefreshCw className="mr-1.5 size-3.5" /> Retry
+              <RefreshCw className="mr-1.5 size-3.5" /> Retry Synthesis
             </Button>
           </div>
         )}
@@ -166,9 +172,9 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
           <div className="flex flex-col gap-5">
             {/* Top Metrics Row */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <div className="flex flex-col justify-between rounded-xl border border-slate-200 bg-slate-50/80 p-3.5">
+              <div className="flex flex-col justify-between rounded-xl border border-slate-200 bg-slate-50/80 p-3.5 shadow-2xs">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                  Career Outcome
+                  Career Trajectory
                 </span>
                 <div className="mt-2 flex items-center">
                   <Badge
@@ -180,7 +186,7 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
                 </div>
               </div>
 
-              <div className="flex flex-col justify-between rounded-xl border border-slate-200 bg-slate-50/80 p-3.5">
+              <div className="flex flex-col justify-between rounded-xl border border-slate-200 bg-slate-50/80 p-3.5 shadow-2xs">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
                   Training Alignment
                 </span>
@@ -194,7 +200,7 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
                 </div>
               </div>
 
-              <div className="flex flex-col justify-between rounded-xl border border-slate-200 bg-slate-50/80 p-3.5">
+              <div className="flex flex-col justify-between rounded-xl border border-slate-200 bg-slate-50/80 p-3.5 shadow-2xs">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
                     Retention Risk
@@ -208,7 +214,7 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
                 </div>
                 <div className="mt-2 flex flex-col gap-1">
                   <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
-                    <span>Confidence:</span>
+                    <span>Model Confidence:</span>
                     <span className="font-extrabold text-slate-950 tabular-nums">
                       {data.outcomeConfidence}%
                     </span>
@@ -219,21 +225,21 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
             </div>
 
             {/* Strategic Narrative */}
-            <div className="rounded-xl border border-purple-200 bg-purple-50/60 p-4 text-slate-800">
+            <div className="rounded-xl border border-purple-200 bg-purple-50/70 p-4 text-slate-900 shadow-2xs">
               <div className="flex items-center gap-2 mb-1.5">
                 <Brain className="size-4 text-purple-700" aria-hidden="true" />
                 <h4 className="text-xs font-bold uppercase tracking-wider text-purple-950">
                   Synthesized Career Insight
                 </h4>
               </div>
-              <p className="text-sm leading-relaxed font-medium text-slate-900 text-pretty">
+              <p className="text-xs sm:text-sm leading-relaxed font-medium text-slate-900 text-pretty">
                 {data.careerInsight}
               </p>
             </div>
 
             {/* Alignment & Risk Detailed Reasons */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className="flex flex-col gap-1.5 rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-xs">
+              <div className="flex flex-col gap-1.5 rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-xs shadow-2xs">
                 <div className="flex items-center gap-1.5 font-bold text-slate-950">
                   <CheckCircle2 className="size-3.5 text-emerald-700" />
                   <span>Alignment Rationale</span>
@@ -243,10 +249,10 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
                 </p>
               </div>
 
-              <div className="flex flex-col gap-1.5 rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-xs">
+              <div className="flex flex-col gap-1.5 rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-xs shadow-2xs">
                 <div className="flex items-center gap-1.5 font-bold text-slate-950">
                   <AlertCircle className="size-3.5 text-amber-700" />
-                  <span>Risk Rationale</span>
+                  <span>Retention Risk Assessment</span>
                 </div>
                 <p className="text-slate-700 font-medium leading-relaxed">
                   {data.riskReason}
@@ -255,9 +261,9 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
             </div>
 
             {/* Recommended Next Skill Card */}
-            <div className="flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50/70 p-4 text-slate-800">
-              <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white shadow-xs">
-                <Lightbulb className="size-4" aria-hidden="true" />
+            <div className="flex items-start gap-3.5 rounded-xl border border-blue-200 bg-blue-50/80 p-4 text-slate-900 shadow-2xs">
+              <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl bg-blue-700 text-white shadow-xs">
+                <Lightbulb className="size-4.5" aria-hidden="true" />
               </span>
               <div className="flex flex-1 flex-col gap-1.5">
                 <div className="flex flex-wrap items-center gap-2">
@@ -274,8 +280,8 @@ export function CareerIntelligenceCard({ traineeId }: CareerIntelligenceCardProp
               </div>
             </div>
 
-            {/* Evidence Used Badges */}
-            <div className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-slate-50/60 p-3.5 text-xs">
+            {/* Evidence Grounding Badges */}
+            <div className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 text-xs">
               <div className="flex items-center gap-1.5 text-slate-600 font-bold">
                 <FileCheck className="size-3.5 text-blue-700" aria-hidden="true" />
                 <span>Evidence Grounding:</span>
