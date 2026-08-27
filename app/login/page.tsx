@@ -20,6 +20,11 @@ import {
   TrendingUp,
   Award,
   Layers,
+  Lock,
+  FileCheck,
+  MapPin,
+  Loader2,
+  ShieldAlert,
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -189,386 +194,337 @@ const roles: RoleOption[] = [
 export default function LoginPage() {
   const router = useRouter()
   const [selectedRoleId, setSelectedRoleId] = useState<string>('admin')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const selectedRole = roles.find((r) => r.id === selectedRoleId) ?? roles[0]
 
   const handleQuickLaunch = (targetHref: string) => {
+    setIsLoading(true)
     router.push(targetHref)
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 antialiased">
-      {/* Top Government Banner */}
-      <header className="border-b border-slate-200 bg-white shadow-xs">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <div className="relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white border border-slate-200 shadow-xs">
-              <Image
-                src="/favicon1.png"
-                alt="KaushalPulse"
-                width={40}
-                height={40}
-                className="size-full object-contain p-0.5"
-                priority
-              />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-bold tracking-tight text-slate-950 sm:text-base">
-                  KAUSHAL
-                </span>
-                <span className="text-slate-300">|</span>
-                <span className="text-xs font-semibold text-slate-700 sm:text-sm">
-                  कौशल्य विकास व रोजगार विभाग
-                </span>
-              </div>
-              <p className="text-xs font-medium text-slate-600 sm:text-xs">
-                Government of Maharashtra • Skilling Outcomes & Career Intelligence
-              </p>
-            </div>
-          </div>
+    <div className="min-h-screen bg-slate-100 text-slate-900 antialiased">
+      {/* 2-PANEL INSTITUTIONAL COMPOSITION */}
+      <div className="grid min-h-screen lg:grid-cols-12">
+        {/* ========================================================================= */}
+        {/* LEFT / BRAND & INSTITUTIONAL PANEL (5 of 12 Columns on Large Screens)     */}
+        {/* ========================================================================= */}
+        <div className="relative flex flex-col justify-between overflow-hidden bg-slate-950 p-6 text-white sm:p-8 lg:col-span-5 lg:p-12">
+          {/* Subtle Institutional Background Pattern */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-10"
+            style={{
+              backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.4) 1px, transparent 0)`,
+              backgroundSize: '24px 24px',
+            }}
+            aria-hidden="true"
+          />
 
-          <div className="hidden items-center gap-2 sm:flex">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-900">
-              <ShieldCheck className="size-3.5 text-blue-700" />
-              <span>Official Demonstration Environment</span>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Container */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Hero Section */}
-        <div className="flex flex-col items-center text-center">
-          <div className="mb-3 flex size-14 items-center justify-center overflow-hidden rounded-2xl bg-white border border-slate-200 shadow-sm p-1">
-            <Image
-              src="/favicon1.png"
-              alt="KaushalPulse"
-              width={56}
-              height={56}
-              className="size-full object-contain"
-              priority
-            />
-          </div>
-
-          <div className="mb-3.5 inline-flex items-center gap-2 rounded-full border border-blue-300 bg-blue-100/90 px-4 py-1 text-xs font-bold text-blue-900 shadow-2xs">
-            <Sparkles className="size-3.5 text-blue-700" />
-            <span>Maharashtra Longitudinal Skilling Outcomes</span>
-          </div>
-
-          <h1 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:text-5xl">
-            KAUSHAL
-          </h1>
-          <p className="mt-1.5 text-lg font-bold tracking-tight text-blue-800 sm:text-xl">
-            Skilling Outcomes & Career Intelligence
-          </p>
-
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-slate-800 sm:text-lg">
-            <span className="font-bold text-slate-950">
-              &ldquo;From training completion to measurable career outcomes.&rdquo;
-            </span>
-          </p>
-
-          <p className="mt-2 max-w-2xl text-xs leading-normal text-slate-700 sm:text-sm">
-            Select a prototype role below to inspect verified training records, live wage progression,
-            skill-gap analytics, and employer-validated retention milestones.
-          </p>
-        </div>
-
-        {/* Platform Demonstration KPIs Bar (Using Real Mock Data) */}
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-4">
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-600">Tracked Trainees</span>
-              <Users className="size-4 text-blue-700" />
-            </div>
-            <p className="mt-1 text-xl font-extrabold text-slate-950 sm:text-2xl">
-              {compact(summary.totalTrainees)}
-            </p>
-            <p className="mt-0.5 text-xs font-medium text-slate-600">
-              {summary.totalTrainees.toLocaleString('en-IN')} across {summary.activeDistricts} districts
-            </p>
-          </div>
-
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-600">Employment Rate</span>
-              <Briefcase className="size-4 text-emerald-700" />
-            </div>
-            <p className="mt-1 text-xl font-extrabold text-slate-950 sm:text-2xl">
-              {summary.employmentRate}%
-            </p>
-            <p className="mt-0.5 text-xs font-medium text-slate-600">
-              Cert. rate {summary.certificationRate}%
-            </p>
-          </div>
-
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-600">6-Mo Retention</span>
-              <Award className="size-4 text-blue-700" />
-            </div>
-            <p className="mt-1 text-xl font-extrabold text-slate-950 sm:text-2xl">
-              {summary.retentionRate}%
-            </p>
-            <p className="mt-0.5 text-xs font-medium text-slate-600">
-              Verified on-job stability
-            </p>
-          </div>
-
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-600">Average Placed Wage</span>
-              <TrendingUp className="size-4 text-amber-700" />
-            </div>
-            <p className="mt-1 text-xl font-extrabold text-slate-950 sm:text-2xl">
-              {inr(summary.averageWage)}
-            </p>
-            <p className="mt-0.5 text-xs font-medium text-slate-600">
-              +{summary.wageGrowth}% YoY median
-            </p>
-          </div>
-        </div>
-
-        {/* Role Selection Header */}
-        <div className="mt-9 flex flex-col justify-between gap-2 border-b border-slate-200 pb-3.5 sm:flex-row sm:items-end">
-          <div>
-            <h2 className="text-lg font-bold tracking-tight text-slate-950 sm:text-xl">
-              Select Demo Role to Continue
-            </h2>
-            <p className="text-xs font-medium text-slate-600 sm:text-sm">
-              Choose an access persona to test the end-to-end outcome verification workflow.
-            </p>
-          </div>
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-900">
-            <Info className="size-4 text-blue-700" />
-            <span>Prototype Sandbox • Instant 1-Click Access</span>
-          </div>
-        </div>
-
-        {/* 4 Roles Grid */}
-        <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {roles.map((role) => {
-            const Icon = role.icon
-            const isSelected = selectedRoleId === role.id
-
-            return (
-              <div
-                key={role.id}
-                role="button"
-                tabIndex={0}
-                onClick={() => setSelectedRoleId(role.id)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    setSelectedRoleId(role.id)
-                  }
-                }}
-                className={cn(
-                  'group relative flex flex-col justify-between rounded-xl border bg-white p-5 text-left transition-all duration-200 cursor-pointer shadow-xs',
-                  isSelected
-                    ? cn(
-                      'ring-2 shadow-md bg-blue-50/30',
-                      role.accentColor.activeBorder,
-                      role.accentColor.activeRing,
-                    )
-                    : 'border-slate-200 hover:border-slate-400 hover:shadow-sm',
-                )}
-              >
-                {/* Selection Indicator Top-Right */}
-                <div className="absolute right-4 top-4">
-                  <div
-                    className={cn(
-                      'flex size-5 items-center justify-center rounded-full border transition-all',
-                      isSelected
-                        ? 'border-blue-700 bg-blue-700 text-white shadow-xs'
-                        : 'border-slate-300 bg-slate-100 group-hover:border-slate-400',
-                    )}
-                  >
-                    {isSelected && <Check className="size-3 stroke-[3]" />}
-                  </div>
-                </div>
-
-                <div>
-                  {/* Role Icon & Category */}
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={cn(
-                        'flex size-11 items-center justify-center rounded-lg border transition-transform duration-200 group-hover:scale-105',
-                        role.accentColor.bg,
-                        role.accentColor.border,
-                        role.accentColor.text,
-                      )}
-                    >
-                      <Icon className="size-5.5" />
-                    </div>
-                    <div className="pr-6">
-                      <span className="block text-xs font-bold tracking-wider text-slate-600 uppercase">
-                        {role.category}
-                      </span>
-                      <span className="text-xs font-semibold text-slate-700">
-                        {role.marathiTitle}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Title & Badge */}
-                  <div className="mt-4">
-                    <h3 className="text-base font-bold text-slate-950">
-                      {role.title}
-                    </h3>
-                    <div className="mt-1.5 inline-block">
-                      <span
-                        className={cn(
-                          'inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-bold',
-                          role.accentColor.badgeBg,
-                          role.accentColor.badgeText,
-                        )}
-                      >
-                        {role.badgeText}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Persona Details Box */}
-                  <div className="mt-3.5 rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs">
-                    <p className="font-bold text-slate-950 text-sm">
-                      {role.persona.name}
-                    </p>
-                    <p className="mt-0.5 text-xs font-medium text-slate-700">
-                      {role.persona.designation}
-                    </p>
-                    <p className="mt-1 text-xs font-semibold text-slate-600">
-                      {role.persona.location}
-                    </p>
-                  </div>
-
-                  {/* Description */}
-                  <p className="mt-3 text-xs leading-relaxed font-normal text-slate-700">
-                    {role.description}
-                  </p>
-
-                  {/* Key Highlights */}
-                  <div className="mt-3.5 space-y-1.5 border-t border-slate-200 pt-3">
-                    <p className="text-xs font-bold tracking-wider text-slate-600 uppercase">
-                      Key Capabilities
-                    </p>
-                    {role.highlights.map((h, i) => (
-                      <div key={i} className="flex items-start gap-1.5 text-xs font-medium text-slate-800">
-                        <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-emerald-700" />
-                        <span className="leading-tight">{h}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bottom Direct Continue Button */}
-                <div className="mt-5 pt-3 border-t border-slate-200">
-                  <Button
-                    type="button"
-                    variant={isSelected ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleQuickLaunch(role.targetHref)
-                    }}
-                    className={cn(
-                      'w-full justify-between text-xs font-bold shadow-2xs',
-                      isSelected
-                        ? 'bg-blue-700 text-white hover:bg-blue-800'
-                        : 'border-slate-300 bg-white text-slate-800 hover:bg-slate-100 hover:text-slate-950',
-                    )}
-                  >
-                    <span>Launch as {role.title.split('/')[0].trim()}</span>
-                    <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-                  </Button>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* Selected Role Action Drawer / Sticky Summary Bar */}
-        <div className="mt-8 rounded-xl border border-blue-200 bg-blue-50/90 p-4 sm:p-5 shadow-xs">
-          <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+          {/* Top Brand Header */}
+          <div className="relative z-10">
             <div className="flex items-center gap-3.5">
-              <div className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-blue-700 text-white shadow-xs">
-                {selectedRole.icon && <selectedRole.icon className="size-6" />}
+              <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-1 shadow-md ring-2 ring-white/20">
+                <Image
+                  src="/favicon1.png"
+                  alt="Kaushal Emblem"
+                  width={48}
+                  height={48}
+                  className="size-full object-contain"
+                  priority
+                />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold tracking-wide text-blue-950 uppercase">
-                    Active Demo Selection:
+                  <span className="text-lg font-black tracking-tight text-white">
+                    KAUSHAL
                   </span>
-                  <span className="rounded-md border border-blue-300 bg-blue-100 px-2 py-0.5 text-xs font-bold text-blue-900">
-                    {selectedRole.title}
+                  <span className="text-slate-600">|</span>
+                  <span className="text-xs font-bold text-slate-300">
+                    महाराष्ट्र शासन
                   </span>
                 </div>
-                <p className="mt-1 text-xs font-medium text-slate-700 sm:text-sm">
-                  Continuing as <span className="font-bold text-slate-950">{selectedRole.persona.name}</span> ({selectedRole.persona.organization})
+                <p className="text-[11px] font-semibold text-slate-400">
+                  Department of Skills, Employment & Innovation
                 </p>
               </div>
             </div>
 
-            <div className="flex w-full items-center justify-end gap-3 sm:w-auto">
-              <Link
-                href={selectedRole.targetHref}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
-              >
-                <span>{selectedRole.primaryActionLabel}</span>
-                <ArrowRight className="size-4" />
-              </Link>
+            {/* Platform Identity & Value Proposition */}
+            <div className="mt-8 lg:mt-12">
+              <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-950/60 px-3.5 py-1 text-xs font-bold text-blue-300 backdrop-blur-xs">
+                <Sparkles className="size-3.5 text-blue-400" />
+                <span>Skilling Outcome Intelligence Platform</span>
+              </div>
+
+              <h1 className="mt-4 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white leading-tight">
+                From training and certification to verified employment, retention and wage progression.
+              </h1>
+
+              <p className="mt-3 text-xs sm:text-sm font-medium leading-relaxed text-slate-300">
+                A unified, verifiable outcome monitoring platform tracking every candidate across the longitudinal skill-to-employment trajectory in Maharashtra.
+              </p>
             </div>
+
+            {/* Compact Longitudinal Outcome Journey */}
+            <div className="mt-7 rounded-2xl border border-slate-800 bg-slate-900/80 p-4 backdrop-blur-xs">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                Longitudinal Skilling Journey
+              </span>
+              <div className="mt-3 grid grid-cols-6 gap-1 text-center text-[10px] font-bold">
+                <div className="rounded-lg bg-slate-800/80 p-2 text-slate-300 border border-slate-700/60">
+                  <span className="block text-slate-400 text-[8px]">01</span>
+                  <span>Train</span>
+                </div>
+                <div className="rounded-lg bg-slate-800/80 p-2 text-slate-300 border border-slate-700/60">
+                  <span className="block text-slate-400 text-[8px]">02</span>
+                  <span>Certify</span>
+                </div>
+                <div className="rounded-lg bg-slate-800/80 p-2 text-slate-300 border border-slate-700/60">
+                  <span className="block text-slate-400 text-[8px]">03</span>
+                  <span>Place</span>
+                </div>
+                <div className="rounded-lg bg-emerald-950/80 p-2 text-emerald-300 border border-emerald-700/60">
+                  <span className="block text-emerald-400 text-[8px]">04</span>
+                  <span>Verify</span>
+                </div>
+                <div className="rounded-lg bg-amber-950/80 p-2 text-amber-300 border border-amber-700/60">
+                  <span className="block text-amber-400 text-[8px]">05</span>
+                  <span>Retain</span>
+                </div>
+                <div className="rounded-lg bg-purple-950/80 p-2 text-purple-300 border border-purple-700/60">
+                  <span className="block text-purple-400 text-[8px]">06</span>
+                  <span>Progress</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Trust & Evidence Pillars */}
+            <div className="mt-6 space-y-2 rounded-2xl border border-slate-800/90 bg-slate-900/60 p-4 text-xs">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
+                Evidence-Led Outcome Monitoring
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300 font-medium">
+                <div className="flex items-center gap-1.5">
+                  <Check className="size-3.5 text-emerald-400 stroke-[3]" />
+                  <span>Verified Employment</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Check className="size-3.5 text-emerald-400 stroke-[3]" />
+                  <span>Longitudinal Retention</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Check className="size-3.5 text-emerald-400 stroke-[3]" />
+                  <span>Wage Progression</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Check className="size-3.5 text-emerald-400 stroke-[3]" />
+                  <span>Programme Intelligence</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Statewide Aggregates Metric Highlights */}
+            <div className="mt-5 grid grid-cols-2 gap-2.5">
+              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
+                <span className="text-[10px] font-bold uppercase text-slate-400">Tracked Candidates</span>
+                <p className="mt-0.5 text-lg font-black text-white tabular-nums">
+                  {summary.totalTrainees.toLocaleString('en-IN')}
+                </p>
+                <span className="text-[10px] text-slate-400">{summary.activeDistricts} Active Districts</span>
+              </div>
+
+              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
+                <span className="text-[10px] font-bold uppercase text-slate-400">Verified Retention</span>
+                <p className="mt-0.5 text-lg font-black text-emerald-400 tabular-nums">
+                  {summary.retentionRate}%
+                </p>
+                <span className="text-[10px] text-slate-400">6-Month Stability</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Left Panel Footer */}
+          <div className="relative z-10 mt-8 pt-4 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+            <span>Maharashtra State Skill Development Society (MSSDS)</span>
+            <span className="font-mono text-[10px] bg-slate-900 px-2 py-0.5 rounded border border-slate-800 text-slate-300">
+              MSSDS • EVALUATION
+            </span>
           </div>
         </div>
 
-        {/* Prototype & Governance Notice */}
-        <div className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
-            <div className="flex items-start gap-3">
-              <ShieldCheck className="mt-0.5 size-5 shrink-0 text-blue-700" />
-              <div className="text-xs leading-relaxed text-slate-700">
-                <p className="font-bold text-slate-950 text-sm">
-                  Prototype Access & Governance Model
+        {/* ========================================================================= */}
+        {/* RIGHT / LOGIN & STAKEHOLDER PORTAL GATEWAY PANEL (7 of 12 Columns)         */}
+        {/* ========================================================================= */}
+        <div className="flex flex-col justify-between bg-white p-6 sm:p-8 lg:col-span-7 lg:p-12">
+          <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+            {/* Header & Security Badge Strip */}
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-950">
+                  Sign in to Kaushal
+                </h2>
+                <p className="text-xs font-medium text-slate-600">
+                  Access your skilling outcome intelligence workspace.
                 </p>
-                <p className="mt-1 font-medium">
-                  This demo portal provides immediate role-based inspection of Maharashtra skilling data.
-                  Production authentication (SSO, Aadhaar e-KYC, and VTP credentials) is decoupled for evaluator convenience.
-                </p>
+              </div>
+
+              <div className="flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-900">
+                <ShieldCheck className="size-3.5 text-blue-700" />
+                <span>Authorized Gateway</span>
+              </div>
+            </div>
+
+            {/* Persona Switcher / Role Selector Grid */}
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                Select Stakeholder Persona:
+              </span>
+
+              <div className="mt-2.5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {roles.map((role) => {
+                  const Icon = role.icon
+                  const isSelected = selectedRoleId === role.id
+
+                  return (
+                    <button
+                      key={role.id}
+                      type="button"
+                      onClick={() => setSelectedRoleId(role.id)}
+                      className={cn(
+                        'flex items-start gap-3 rounded-xl border p-3.5 text-left transition-all duration-200 cursor-pointer shadow-2xs',
+                        isSelected
+                          ? 'border-blue-700 bg-blue-50/70 ring-2 ring-blue-700/20 shadow-xs'
+                          : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          'flex size-9 shrink-0 items-center justify-center rounded-lg border text-xs font-bold',
+                          role.accentColor.bg,
+                          role.accentColor.border,
+                          role.accentColor.text
+                        )}
+                      >
+                        <Icon className="size-4.5" />
+                      </span>
+
+                      <div className="flex flex-1 flex-col min-w-0">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="font-bold text-xs sm:text-sm text-slate-950 truncate">
+                            {role.title.split('/')[0].trim()}
+                          </span>
+                          {isSelected && (
+                            <span className="flex size-4 shrink-0 items-center justify-center rounded-full bg-blue-700 text-white">
+                              <Check className="size-2.5 stroke-[3]" />
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-[11px] font-semibold text-slate-500 truncate">
+                          {role.marathiTitle}
+                        </span>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Selected Stakeholder Detail Dossier Card */}
+            <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-5 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3.5">
+                <div className="flex items-center gap-3">
+                  <span className="flex size-10 items-center justify-center rounded-xl bg-blue-700 text-white shadow-xs">
+                    {selectedRole.icon && <selectedRole.icon className="size-5" />}
+                  </span>
+                  <div>
+                    <h3 className="text-base font-black text-slate-950">
+                      {selectedRole.persona.name}
+                    </h3>
+                    <p className="text-xs font-semibold text-slate-600">
+                      {selectedRole.persona.designation}
+                    </p>
+                  </div>
+                </div>
+
+                <Badge variant="default" className="text-xs font-bold self-start sm:self-auto py-0.5 px-2.5">
+                  {selectedRole.badgeText}
+                </Badge>
+              </div>
+
+              {/* Organization & Location Strip */}
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold text-slate-700">
+                <span className="flex items-center gap-1.5">
+                  <Building2 className="size-3.5 text-blue-700 shrink-0" />
+                  <span>{selectedRole.persona.organization}</span>
+                </span>
+                <span className="flex items-center gap-1.5 text-slate-500">
+                  <MapPin className="size-3.5 text-slate-400 shrink-0" />
+                  <span>{selectedRole.persona.location}</span>
+                </span>
+              </div>
+
+              {/* Persona Description */}
+              <p className="mt-3 text-xs leading-relaxed font-medium text-slate-700">
+                {selectedRole.description}
+              </p>
+
+              {/* Key Capabilities */}
+              <div className="mt-3.5 space-y-1.5 border-t border-slate-200/80 pt-3">
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+                  Operational Capabilities:
+                </span>
+                {selectedRole.highlights.map((h, idx) => (
+                  <div key={idx} className="flex items-start gap-1.5 text-xs font-medium text-slate-800">
+                    <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-emerald-700" />
+                    <span>{h}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Primary Action Button */}
+              <div className="mt-5 pt-3 border-t border-slate-200">
+                <Button
+                  type="button"
+                  size="lg"
+                  onClick={() => handleQuickLaunch(selectedRole.targetHref)}
+                  disabled={isLoading}
+                  className="w-full justify-between bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm h-11 shadow-xs transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    {isLoading ? (
+                      <Loader2 className="size-4 animate-spin" />
+                    ) : (
+                      <Lock className="size-4" />
+                    )}
+                    <span>{isLoading ? 'Authenticating...' : selectedRole.primaryActionLabel}</span>
+                  </span>
+                  <ArrowRight className="size-4" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Prototype & Governance Notice */}
+            <div className="rounded-xl border border-slate-200 bg-white p-4 text-xs shadow-2xs">
+              <div className="flex items-start gap-3">
+                <Info className="size-4.5 text-blue-700 shrink-0 mt-0.5" />
+                <div className="text-slate-600 font-medium leading-relaxed">
+                  <strong className="font-bold text-slate-900">Prototype Access Architecture: </strong>
+                  This evaluation portal provides immediate role-based inspection of Maharashtra skilling outcome data.
+                  In production, authentication connects to State Single Sign-On (SSO) and Aadhaar e-KYC verified candidate registries.
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
-            <div className="flex items-start gap-3">
-              <Layers className="mt-0.5 size-5 shrink-0 text-emerald-700" />
-              <div className="text-xs leading-relaxed text-slate-700">
-                <p className="font-bold text-slate-950 text-sm">
-                  Longitudinal Verification Lifecycle
-                </p>
-                <p className="mt-1 font-medium">
-                  Tracks each candidate across enrollment, training completion, NSQF certification,
-                  employer wage confirmation, and 30/90/180-day retention follow-ups.
-                </p>
-              </div>
-            </div>
-          </div>
+          {/* Right Panel Footer */}
+          <footer className="mx-auto mt-8 w-full max-w-2xl border-t border-slate-200 pt-4 text-center text-xs text-slate-500 font-medium">
+            <p>
+              Department of Skills, Employment, Entrepreneurship & Innovation • Government of Maharashtra
+            </p>
+          </footer>
         </div>
-
-        {/* Footer */}
-        <footer className="mt-10 border-t border-slate-200 pt-6 text-center text-xs text-slate-600">
-          <p className="font-bold text-slate-800">
-            Maharashtra State Skill Development Society (MSSDS)
-          </p>
-          <p className="mt-0.5 text-xs font-medium text-slate-600">
-            Department of Skills, Employment, Entrepreneurship & Innovation • Government of Maharashtra
-          </p>
-          <p className="mt-1 text-xs text-slate-500">
-            KAUSHAL Prototype Evaluation Platform • All demonstration records illustrative of Maharashtra skilling operations
-          </p>
-        </footer>
-      </main>
+      </div>
     </div>
   )
 }
