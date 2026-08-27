@@ -211,12 +211,23 @@ export default function LoginPage() {
         {/* LEFT / BRAND & INSTITUTIONAL PANEL (5 of 12 Columns on Large Screens)     */}
         {/* ========================================================================= */}
         <div className="relative flex flex-col justify-between overflow-hidden bg-slate-950 p-6 text-white sm:p-8 lg:col-span-5 lg:p-12">
-          {/* Subtle Institutional Background Pattern */}
+          {/* Decorative Institutional Background Asset */}
           <div
-            className="pointer-events-none absolute inset-0 opacity-10"
+            className="pointer-events-none absolute inset-0 z-0 bg-cover bg-no-repeat opacity-55 select-none"
             style={{
-              backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.4) 1px, transparent 0)`,
-              backgroundSize: '24px 24px',
+              backgroundImage: "url('/login-bg.png')",
+              backgroundPosition: 'center bottom',
+              backgroundSize: 'cover',
+            }}
+            aria-hidden="true"
+          />
+
+          {/* Subtle Central Atmospheric Glow for Depth & Visual Integration */}
+          <div
+            className="pointer-events-none absolute inset-0 z-0 select-none opacity-35"
+            style={{
+              background:
+                'radial-gradient(circle at 60% 42%, rgba(37, 99, 235, 0.2) 0%, rgba(15, 23, 42, 0.08) 45%, transparent 70%)',
             }}
             aria-hidden="true"
           />
@@ -251,48 +262,48 @@ export default function LoginPage() {
             </div>
 
             {/* Platform Identity & Value Proposition */}
-            <div className="mt-8 lg:mt-12">
-              <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-950/60 px-3.5 py-1 text-xs font-bold text-blue-300 backdrop-blur-xs">
+            <div className="mt-7 lg:mt-9">
+              <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/35 bg-blue-950/70 px-3.5 py-1 text-xs font-bold text-blue-300 backdrop-blur-xs">
                 <Sparkles className="size-3.5 text-blue-400" />
                 <span>Skilling Outcome Intelligence Platform</span>
               </div>
 
-              <h1 className="mt-4 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white leading-tight">
+              <h1 className="mt-3.5 text-2xl sm:text-3xl lg:text-[31px] font-extrabold tracking-tight text-white leading-[1.22] text-balance">
                 From training and certification to verified employment, retention and wage progression.
               </h1>
 
-              <p className="mt-3 text-xs sm:text-sm font-medium leading-relaxed text-slate-300">
+              <p className="mt-2.5 text-xs sm:text-sm font-normal leading-relaxed text-slate-300">
                 A unified, verifiable outcome monitoring platform tracking every candidate across the longitudinal skill-to-employment trajectory in Maharashtra.
               </p>
             </div>
 
             {/* Compact Longitudinal Outcome Journey */}
-            <div className="mt-7 rounded-2xl border border-slate-800 bg-slate-900/80 p-4 backdrop-blur-xs">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+            <div className="mt-5 rounded-xl border border-slate-800/90 bg-slate-900/85 p-3.5 backdrop-blur-sm shadow-xs">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-2.5">
                 Longitudinal Skilling Journey
               </span>
-              <div className="mt-3 grid grid-cols-6 gap-1 text-center text-[10px] font-bold">
-                <div className="rounded-lg bg-slate-800/80 p-2 text-slate-300 border border-slate-700/60">
+              <div className="grid grid-cols-6 gap-1.5 text-center text-[10px] font-bold">
+                <div className="rounded-lg bg-slate-800/85 p-2 text-slate-300 border border-slate-700/60">
                   <span className="block text-slate-400 text-[8px]">01</span>
                   <span>Train</span>
                 </div>
-                <div className="rounded-lg bg-slate-800/80 p-2 text-slate-300 border border-slate-700/60">
+                <div className="rounded-lg bg-slate-800/85 p-2 text-slate-300 border border-slate-700/60">
                   <span className="block text-slate-400 text-[8px]">02</span>
                   <span>Certify</span>
                 </div>
-                <div className="rounded-lg bg-slate-800/80 p-2 text-slate-300 border border-slate-700/60">
+                <div className="rounded-lg bg-slate-800/85 p-2 text-slate-300 border border-slate-700/60">
                   <span className="block text-slate-400 text-[8px]">03</span>
                   <span>Place</span>
                 </div>
-                <div className="rounded-lg bg-emerald-950/80 p-2 text-emerald-300 border border-emerald-700/60">
+                <div className="rounded-lg bg-emerald-950/90 p-2 text-emerald-300 border border-emerald-700/70">
                   <span className="block text-emerald-400 text-[8px]">04</span>
                   <span>Verify</span>
                 </div>
-                <div className="rounded-lg bg-amber-950/80 p-2 text-amber-300 border border-amber-700/60">
+                <div className="rounded-lg bg-amber-950/90 p-2 text-amber-300 border border-amber-700/70">
                   <span className="block text-amber-400 text-[8px]">05</span>
                   <span>Retain</span>
                 </div>
-                <div className="rounded-lg bg-purple-950/80 p-2 text-purple-300 border border-purple-700/60">
+                <div className="rounded-lg bg-purple-950/90 p-2 text-purple-300 border border-purple-700/70">
                   <span className="block text-purple-400 text-[8px]">06</span>
                   <span>Progress</span>
                 </div>
@@ -300,11 +311,11 @@ export default function LoginPage() {
             </div>
 
             {/* Trust & Evidence Pillars */}
-            <div className="mt-6 space-y-2 rounded-2xl border border-slate-800/90 bg-slate-900/60 p-4 text-xs">
+            <div className="mt-3.5 space-y-2 rounded-xl border border-slate-800/90 bg-slate-900/85 p-3.5 text-xs backdrop-blur-sm shadow-xs">
               <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
                 Evidence-Led Outcome Monitoring
               </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300 font-medium">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-200 font-medium">
                 <div className="flex items-center gap-1.5">
                   <Check className="size-3.5 text-emerald-400 stroke-[3]" />
                   <span>Verified Employment</span>
@@ -325,27 +336,33 @@ export default function LoginPage() {
             </div>
 
             {/* Statewide Aggregates Metric Highlights */}
-            <div className="mt-5 grid grid-cols-2 gap-2.5">
-              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
-                <span className="text-[10px] font-bold uppercase text-slate-400">Tracked Candidates</span>
-                <p className="mt-0.5 text-lg font-black text-white tabular-nums">
+            <div className="mt-3.5 grid grid-cols-2 gap-3">
+              <div className="rounded-xl border border-slate-800/90 bg-slate-900/85 p-3 backdrop-blur-sm shadow-xs">
+                <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wide text-slate-400">
+                  <span>Tracked Candidates</span>
+                  <Users className="size-3 text-blue-400" />
+                </div>
+                <p className="mt-0.5 text-xl font-black text-white tabular-nums">
                   {summary.totalTrainees.toLocaleString('en-IN')}
                 </p>
-                <span className="text-[10px] text-slate-400">{summary.activeDistricts} Active Districts</span>
+                <span className="text-[10px] text-slate-400 font-medium">{summary.activeDistricts} Active Districts</span>
               </div>
 
-              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
-                <span className="text-[10px] font-bold uppercase text-slate-400">Verified Retention</span>
-                <p className="mt-0.5 text-lg font-black text-emerald-400 tabular-nums">
+              <div className="rounded-xl border border-emerald-900/70 bg-slate-900/90 p-3 backdrop-blur-sm shadow-xs ring-1 ring-emerald-500/25">
+                <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wide text-emerald-400">
+                  <span>Verified Retention</span>
+                  <ShieldCheck className="size-3.5 text-emerald-400" />
+                </div>
+                <p className="mt-0.5 text-xl font-black text-emerald-400 tabular-nums">
                   {summary.retentionRate}%
                 </p>
-                <span className="text-[10px] text-slate-400">6-Month Stability</span>
+                <span className="text-[10px] text-slate-400 font-medium">6-Month Stability</span>
               </div>
             </div>
           </div>
 
           {/* Left Panel Footer */}
-          <div className="relative z-10 mt-8 pt-4 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+          <div className="relative z-10 mt-6 pt-4 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
             <span>Maharashtra State Skill Development Society (MSSDS)</span>
             <span className="font-mono text-[10px] bg-slate-900 px-2 py-0.5 rounded border border-slate-800 text-slate-300">
               MSSDS • EVALUATION
@@ -357,31 +374,31 @@ export default function LoginPage() {
         {/* RIGHT / LOGIN & STAKEHOLDER PORTAL GATEWAY PANEL (7 of 12 Columns)         */}
         {/* ========================================================================= */}
         <div className="flex flex-col justify-between bg-white p-6 sm:p-8 lg:col-span-7 lg:p-12">
-          <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+          <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
             {/* Header & Security Badge Strip */}
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/70 pb-4">
               <div>
-                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-950">
+                <h2 className="text-2xl sm:text-[26px] font-black tracking-tight text-slate-950">
                   Sign in to Kaushal
                 </h2>
-                <p className="text-xs font-medium text-slate-600">
+                <p className="mt-0.5 text-xs sm:text-sm font-medium text-slate-500">
                   Access your skilling outcome intelligence workspace.
                 </p>
               </div>
 
-              <div className="flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-900">
-                <ShieldCheck className="size-3.5 text-blue-700" />
+              <div className="flex items-center gap-1.5 rounded-full border border-blue-200/80 bg-blue-50/80 px-3 py-1 text-xs font-bold text-blue-900 shadow-2xs">
+                <ShieldCheck className="size-3.5 text-blue-600" />
                 <span>Authorized Gateway</span>
               </div>
             </div>
 
             {/* Persona Switcher / Role Selector Grid */}
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Select Stakeholder Persona:
               </span>
 
-              <div className="mt-2.5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {roles.map((role) => {
                   const Icon = role.icon
                   const isSelected = selectedRoleId === role.id
@@ -392,18 +409,18 @@ export default function LoginPage() {
                       type="button"
                       onClick={() => setSelectedRoleId(role.id)}
                       className={cn(
-                        'flex items-start gap-3 rounded-xl border p-3.5 text-left transition-all duration-200 cursor-pointer shadow-2xs',
+                        'flex items-center gap-3 rounded-xl border p-3 text-left transition-all duration-200 cursor-pointer',
                         isSelected
-                          ? 'border-blue-700 bg-blue-50/70 ring-2 ring-blue-700/20 shadow-xs'
-                          : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
+                          ? 'border-blue-600 bg-blue-50/60 ring-1 ring-blue-600/30 shadow-xs'
+                          : 'border-slate-200/90 bg-white hover:border-slate-300 hover:bg-slate-50/60'
                       )}
                     >
                       <span
                         className={cn(
-                          'flex size-9 shrink-0 items-center justify-center rounded-lg border text-xs font-bold',
-                          role.accentColor.bg,
-                          role.accentColor.border,
-                          role.accentColor.text
+                          'flex size-9 shrink-0 items-center justify-center rounded-lg border text-xs font-bold transition-colors',
+                          isSelected
+                            ? 'border-blue-200 bg-blue-600 text-white'
+                            : 'border-slate-200 bg-slate-100/80 text-slate-600'
                         )}
                       >
                         <Icon className="size-4.5" />
@@ -415,12 +432,12 @@ export default function LoginPage() {
                             {role.title.split('/')[0].trim()}
                           </span>
                           {isSelected && (
-                            <span className="flex size-4 shrink-0 items-center justify-center rounded-full bg-blue-700 text-white">
+                            <span className="flex size-4 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white">
                               <Check className="size-2.5 stroke-[3]" />
                             </span>
                           )}
                         </div>
-                        <span className="text-[11px] font-semibold text-slate-500 truncate">
+                        <span className="text-[11px] font-medium text-slate-500 truncate mt-0.5">
                           {role.marathiTitle}
                         </span>
                       </div>
@@ -431,31 +448,31 @@ export default function LoginPage() {
             </div>
 
             {/* Selected Stakeholder Detail Dossier Card */}
-            <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-5 shadow-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3.5">
+            <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
                 <div className="flex items-center gap-3">
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-blue-700 text-white shadow-xs">
+                  <span className="flex size-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-2xs shrink-0">
                     {selectedRole.icon && <selectedRole.icon className="size-5" />}
                   </span>
                   <div>
-                    <h3 className="text-base font-black text-slate-950">
+                    <h3 className="text-base font-black text-slate-950 leading-tight">
                       {selectedRole.persona.name}
                     </h3>
-                    <p className="text-xs font-semibold text-slate-600">
+                    <p className="text-xs font-semibold text-slate-600 mt-0.5">
                       {selectedRole.persona.designation}
                     </p>
                   </div>
                 </div>
 
-                <Badge variant="default" className="text-xs font-bold self-start sm:self-auto py-0.5 px-2.5">
+                <Badge variant="default" className="text-xs font-bold self-start sm:self-auto py-0.5 px-2.5 bg-blue-50 text-blue-900 border-blue-200/80">
                   {selectedRole.badgeText}
                 </Badge>
               </div>
 
               {/* Organization & Location Strip */}
-              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold text-slate-700">
-                <span className="flex items-center gap-1.5">
-                  <Building2 className="size-3.5 text-blue-700 shrink-0" />
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-medium text-slate-500">
+                <span className="flex items-center gap-1.5 text-slate-700 font-semibold">
+                  <Building2 className="size-3.5 text-blue-600 shrink-0" />
                   <span>{selectedRole.persona.organization}</span>
                 </span>
                 <span className="flex items-center gap-1.5 text-slate-500">
@@ -465,31 +482,31 @@ export default function LoginPage() {
               </div>
 
               {/* Persona Description */}
-              <p className="mt-3 text-xs leading-relaxed font-medium text-slate-700">
+              <p className="mt-2.5 text-xs leading-relaxed font-normal text-slate-600">
                 {selectedRole.description}
               </p>
 
               {/* Key Capabilities */}
-              <div className="mt-3.5 space-y-1.5 border-t border-slate-200/80 pt-3">
-                <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+              <div className="mt-3.5 space-y-1.5 border-t border-slate-100 pt-3">
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-1">
                   Operational Capabilities:
                 </span>
                 {selectedRole.highlights.map((h, idx) => (
-                  <div key={idx} className="flex items-start gap-1.5 text-xs font-medium text-slate-800">
-                    <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-emerald-700" />
+                  <div key={idx} className="flex items-start gap-2 text-xs font-medium text-slate-800">
+                    <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-emerald-600" />
                     <span>{h}</span>
                   </div>
                 ))}
               </div>
 
               {/* Primary Action Button */}
-              <div className="mt-5 pt-3 border-t border-slate-200">
+              <div className="mt-5 pt-3.5 border-t border-slate-100">
                 <Button
                   type="button"
                   size="lg"
                   onClick={() => handleQuickLaunch(selectedRole.targetHref)}
                   disabled={isLoading}
-                  className="w-full justify-between bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm h-11 shadow-xs transition-colors"
+                  className="w-full justify-between bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm h-12 rounded-xl shadow-xs transition-all cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
                     {isLoading ? (
@@ -505,11 +522,11 @@ export default function LoginPage() {
             </div>
 
             {/* Prototype & Governance Notice */}
-            <div className="rounded-xl border border-slate-200 bg-white p-4 text-xs shadow-2xs">
-              <div className="flex items-start gap-3">
-                <Info className="size-4.5 text-blue-700 shrink-0 mt-0.5" />
-                <div className="text-slate-600 font-medium leading-relaxed">
-                  <strong className="font-bold text-slate-900">Prototype Access Architecture: </strong>
+            <div className="rounded-xl border border-slate-200/70 bg-slate-50/70 p-3.5 text-xs">
+              <div className="flex items-start gap-2.5">
+                <Info className="size-4 text-blue-600 shrink-0 mt-0.5" />
+                <div className="text-slate-500 font-normal leading-relaxed text-[11px] sm:text-xs">
+                  <strong className="font-semibold text-slate-800">Prototype Access Architecture: </strong>
                   This evaluation portal provides immediate role-based inspection of Maharashtra skilling outcome data.
                   In production, authentication connects to State Single Sign-On (SSO) and Aadhaar e-KYC verified candidate registries.
                 </div>
@@ -518,7 +535,7 @@ export default function LoginPage() {
           </div>
 
           {/* Right Panel Footer */}
-          <footer className="mx-auto mt-8 w-full max-w-2xl border-t border-slate-200 pt-4 text-center text-xs text-slate-500 font-medium">
+          <footer className="mx-auto mt-6 w-full max-w-2xl border-t border-slate-200/80 pt-4 text-center text-xs text-slate-400 font-medium">
             <p>
               Department of Skills, Employment, Entrepreneurship & Innovation • Government of Maharashtra
             </p>
